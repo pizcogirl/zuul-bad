@@ -34,23 +34,23 @@ public class Game
      */
     private void createRooms()
     {
-        Room entrada, pasillo, caverna, bifurcacion, tesoro, monstruo;
+        Room entrada, pasillo, caverna, bifurcacion, habitacionTesoro, guarida;
       
         // create the rooms
         entrada = new Room("La entrada de una mazmorra");
         pasillo = new Room("un pasillo de la mazmorra");
         caverna = new Room("una caverna rocosa");
         bifurcacion = new Room("el camino se divide en dos");
-        tesoro = new Room("una habitacion del tesoro");
-        monstruo = new Room("la guarida del monstruo");
+        habitacionTesoro = new Room("una habitacion del tesoro");
+        guarida = new Room("la guarida del monstruo");
         
         // initialise room exits
         entrada.setExits(null, pasillo, null, null);
         pasillo.setExits(null, bifurcacion, caverna, entrada);
         caverna.setExits(pasillo, null, null, null);
-        bifurcacion.setExits(tesoro, monstruo, null, pasillo);
-        tesoro.setExits(null, null, bifurcacion, null);
-        monstruo.setExits(null, null, null, bifurcacion);
+        bifurcacion.setExits(habitacionTesoro, guarida, null, pasillo);
+        habitacionTesoro.setExits(null, null, bifurcacion, null);
+        guarida.setExits(null, null, null, bifurcacion);
 
         currentRoom = entrada;  // start game outside
     }

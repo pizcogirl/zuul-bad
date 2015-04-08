@@ -34,23 +34,25 @@ public class Game
      */
     private void createRooms()
     {
-        Room outside, theater, pub, lab, office;
+        Room entrada, pasillo, caverna, bifurcacion, tesoro, monstruo;
       
         // create the rooms
-        outside = new Room("outside the main entrance of the university");
-        theater = new Room("in a lecture theater");
-        pub = new Room("in the campus pub");
-        lab = new Room("in a computing lab");
-        office = new Room("in the computing admin office");
+        entrada = new Room("La entrada de una mazmorra");
+        pasillo = new Room("un pasillo de la mazmorra");
+        caverna = new Room("una caverna rocosa");
+        bifurcacion = new Room("el camino se divide en dos");
+        tesoro = new Room("una habitacion del tesoro");
+        monstruo = new Room("la guarida del monstruo");
         
         // initialise room exits
-        outside.setExits(null, theater, lab, pub);
-        theater.setExits(null, null, null, outside);
-        pub.setExits(null, outside, null, null);
-        lab.setExits(outside, office, null, null);
-        office.setExits(null, null, null, lab);
+        entrada.setExits(null, pasillo, null, null);
+        pasillo.setExits(null, bifurcacion, caverna, entrada);
+        caverna.setExits(pasillo, null, null, null);
+        bifurcacion.setExits(tesoro, monstruo, null, pasillo);
+        tesoro.setExits(null, null, bifurcacion, null);
+        monstruo.setExits(null, null, null, bifurcacion);
 
-        currentRoom = outside;  // start game outside
+        currentRoom = entrada;  // start game outside
     }
 
     /**

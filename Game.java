@@ -19,7 +19,7 @@ public class Game
 {
     private Parser parser;
     private Room currentRoom;
-        
+
     /**
      * Create the game and initialise its internal map.
      */
@@ -34,8 +34,8 @@ public class Game
      */
     private void createRooms()
     {
-        Room entrada, pasillo, caverna, bifurcacion, habitacionTesoro, guarida;
-      
+        Room entrada, pasillo, caverna, bifurcacion, habitacionTesoro, guarida, camaraOculta, salidaObstruida;
+
         // create the rooms
         entrada = new Room("la entrada de una mazmorra");
         pasillo = new Room("un pasillo de la mazmorra");
@@ -43,14 +43,18 @@ public class Game
         bifurcacion = new Room("el camino se divide en dos");
         habitacionTesoro = new Room("una habitacion del tesoro");
         guarida = new Room("la guarida del monstruo");
-        
-        // initialise room exits
-        entrada.setExits(null, pasillo, null, null);
-        pasillo.setExits(null, bifurcacion, caverna, entrada);
-        caverna.setExits(pasillo, null, null, null);
-        bifurcacion.setExits(habitacionTesoro, guarida, null, pasillo);
-        habitacionTesoro.setExits(null, null, bifurcacion, null);
-        guarida.setExits(null, null, null, bifurcacion);
+        camaraOculta = new Room ("en una sala pequeña, a la que entras por un pequeño boquete");
+        salidaObstruida = new Room ("un pasillo que termina en una salida de la mazmorra, obstruida por un derrumbamiento");
+
+        // initialise room exits (norte, este, sur, oeste, sureste, noroeste)
+        entrada.setExits(null, pasillo, null, null, null, null);
+        pasillo.setExits(null, bifurcacion, caverna, entrada, null, null);
+        caverna.setExits(pasillo, null, null, null, camaraOculta, null);
+        bifurcacion.setExits(habitacionTesoro, guarida, null, pasillo, null, null);
+        habitacionTesoro.setExits(null, null, bifurcacion, null, null, null);
+        guarida.setExits(null, null, null, bifurcacion, null, null);
+        camaraOculta.setExits(null, null, null, null, salidaObstruida, caverna);
+        salidaObstruida.setExits(null, null, null, null, null, camaraOculta);
 
         currentRoom = entrada;  // start game outside
     }
@@ -64,7 +68,7 @@ public class Game
 
         // Enter the main command loop.  Here we repeatedly read commands and
         // execute them until the game is over.
-                
+
         boolean finished = false;
         while (! finished) {
             Command command = parser.getCommand();
@@ -159,6 +163,12 @@ public class Game
         if(direction.equals("oeste")) {
             nextRoom = currentRoom.westExit;
         }
+        if(direction.equals("sureste")) {
+            nextRoom = currentRoom.suresteExit;
+        }
+        if(direction.equals("noroeste")) {
+            nextRoom = currentRoom.noroesteExit;
+        }
 
         if (nextRoom == null) {
             System.out.println("No puedes continuar por ahí");
@@ -185,7 +195,7 @@ public class Game
             return true;  // signal that we want to quit
         }
     }
-    
+
     /**
      * Imprime la información de la localización
      */
@@ -204,6 +214,12 @@ public class Game
         }
         if(currentRoom.westExit != null) {
             System.out.print("oeste ");
+        }
+        if(currentRoom.suresteExit != null) {
+            System.out.print("sureste ");
+        }
+        if(currentRoom.noroesteExit != null) {
+            System.out.print("noroeste ");
         }
     }
 }

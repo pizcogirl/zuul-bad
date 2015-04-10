@@ -14,13 +14,13 @@
  */
 public class Room 
 {
-    public String description;
-    public Room northExit;
-    public Room southExit;
-    public Room eastExit;
-    public Room westExit;
-    public Room suresteExit;
-    public Room noroesteExit;
+    private String description;
+    private Room northExit;
+    private Room southExit;
+    private Room eastExit;
+    private Room westExit;
+    private Room suresteExit;
+    private Room noroesteExit;
 
     /**
      * Create a room described "description". Initially, it has
@@ -65,6 +65,29 @@ public class Room
     public String getDescription()
     {
         return description;
+    }
+
+    /**
+     * Devuelve la habitación que se encuentra en la direccion indicada como parametro
+     * @param dir Dirección por la que quiere salir
+     * @return la habitación que se encuentra en esa dirección, o null si no hay ninguna
+     */
+    public Room getExit(String dir)
+    {
+        Room salida = null;
+        if(dir.equals("norte"))
+            salida = northExit;
+        if(dir.equals("este"))
+            salida = eastExit;
+        if(dir.equals("sur"))
+            salida = southExit;
+        if(dir.equals("oeste"))
+            salida = westExit;
+        if(dir.equals("sureste"))
+            salida = suresteExit;
+        if(dir.equals("noroeste"))
+            salida = noroesteExit;
+        return salida;
     }
 
 }

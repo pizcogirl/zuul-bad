@@ -185,23 +185,6 @@ public class Game
     {
         System.out.println("Estas en " + currentRoom.getDescription());
         System.out.print("Salidas: ");
-        if(currentRoom.getExit("norte") != null) {
-            System.out.print("norte ");
-        }
-        if(currentRoom.getExit("este") != null) {
-            System.out.print("este ");
-        }
-        if(currentRoom.getExit("sur") != null) {
-            System.out.print("sur ");
-        }
-        if(currentRoom.getExit("oeste") != null) {
-            System.out.print("oeste ");
-        }
-        if(currentRoom.getExit("sureste") != null) {
-            System.out.print("sureste ");
-        }
-        if(currentRoom.getExit("noroeste") != null) {
-            System.out.print("noroeste ");
-        }
+        System.out.print(currentRoom.getExitString());
     }
 }

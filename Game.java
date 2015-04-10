@@ -47,14 +47,20 @@ public class Game
         salidaObstruida = new Room ("un pasillo que termina en una salida de la mazmorra, obstruida por un derrumbamiento");
 
         // initialise room exits (norte, este, sur, oeste, sureste, noroeste)
-        entrada.setExits(null, pasillo, null, null, null, null);
-        pasillo.setExits(null, bifurcacion, caverna, entrada, null, null);
-        caverna.setExits(pasillo, null, null, null, camaraOculta, null);
-        bifurcacion.setExits(habitacionTesoro, guarida, null, pasillo, null, null);
-        habitacionTesoro.setExits(null, null, bifurcacion, null, null, null);
-        guarida.setExits(null, null, null, bifurcacion, null, null);
-        camaraOculta.setExits(null, null, null, null, salidaObstruida, caverna);
-        salidaObstruida.setExits(null, null, null, null, null, camaraOculta);
+        entrada.setExit("este", pasillo);
+        pasillo.setExit("este", bifurcacion);
+        pasillo.setExit("sur", caverna);
+        pasillo.setExit("oeste", entrada);
+        caverna.setExit("este", pasillo);
+        caverna.setExit("sureste", camaraOculta);
+        bifurcacion.setExit("norte", habitacionTesoro);
+        bifurcacion.setExit("este", guarida);
+        bifurcacion.setExit("oeste", pasillo);
+        habitacionTesoro.setExit("sur", bifurcacion);
+        guarida.setExit("oeste", bifurcacion);
+        camaraOculta.setExit("suroeste", salidaObstruida);
+        camaraOculta.setExit("noroeste", caverna);
+        salidaObstruida.setExit("noroeste", camaraOculta);
 
         currentRoom = entrada;  // start game outside
     }

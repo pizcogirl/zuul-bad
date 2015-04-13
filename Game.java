@@ -121,7 +121,9 @@ public class Game
         else if (commandWord.equals("terminar")) {
             wantToQuit = quit(command);
         }
-
+        else if (commandWord.equals("examinar")){
+            printLocationInfo();
+        }
         return wantToQuit;
     }
 

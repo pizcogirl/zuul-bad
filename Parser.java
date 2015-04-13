@@ -62,4 +62,13 @@ public class Parser
             return new Command(null, word2); 
         }
     }
+    
+    /**
+     * Metodo que devuelve un comando
+     * @return Un comando introducido por teclado, puede ser valido o no
+     */
+    public CommandWords getCommandWords()
+    {
+        return commands;
+    }
 }

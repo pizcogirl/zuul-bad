@@ -136,11 +136,7 @@ public class Game
      */
     private void printHelp() 
     {
-        System.out.println("Estas perdido en mitad de ninguna parte");
-        System.out.println("entras en una mazmorra.");
-        System.out.println();
-        System.out.println("Los comandos son:");
-        System.out.println(" ir terminar ayuda");
+        parser.getCommandWords().showAll();
     }
 
     /** 

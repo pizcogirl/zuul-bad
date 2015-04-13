@@ -136,7 +136,7 @@ public class Game
      */
     private void printHelp() 
     {
-        parser.getCommandWords().showAll();
+        parser.printValidCommands();
     }
 
     /** 

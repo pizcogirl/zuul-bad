@@ -64,11 +64,10 @@ public class Parser
     }
     
     /**
-     * Metodo que devuelve un comando
-     * @return Un comando introducido por teclado, puede ser valido o no
+     * Metodo que imprime todos los comandos validos disponibles
      */
-    public CommandWords getCommandWords()
+    public void  printValidCommands()
     {
-        return commands;
+        commands.showAll();
     }
 }

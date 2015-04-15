@@ -1,6 +1,7 @@
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.ArrayList;
 
 /**
  * Class Room - a room in an adventure game.
@@ -20,8 +21,7 @@ public class Room
 {
     private String description;
     private HashMap<String, Room> salidas;
-    private String descripcionObj;
-    private float peso;
+    private ArrayList<Item> objetos;
 
     /**
      * Create a room described "description". Initially, it has
@@ -29,12 +29,11 @@ public class Room
      * "an open court yard".
      * @param description The room's description.
      */
-    public Room(String description, String descObj, float peso) 
+    public Room(String description) 
     {
         this.description = description;
         salidas = new HashMap<String, Room>();
-        this.descripcionObj = descObj;
-        this.peso = peso;
+        objetos = new ArrayList<Item>();
     }
 
     /**
@@ -101,8 +100,29 @@ public class Room
     {
         String descr = "";
         descr = "Estas en " + description + "\nSalidas: " + getExitString();
-        descr = descr + "\nVes " + descripcionObj + " que pesa " + peso;
+        // Si hay algun objeto en la habitación, lo incluye en la descripción
+        if (objetos.size() > 0)
+        {
+            descr += "\nVes los siguientes objetos:";
+            for(int i = 0; i < objetos.size(); i++)
+            {
+                descr += "\n- " + objetos.get(i).getDescripcionObj() + " que pesa " + objetos.get(i).getPeso();
+            }
+        }
+        else
+        {
+            descr += "\nNo ves nada aqui";
+        }
         return descr;
+    }
+
+    /**
+     * Añade un objeto a la localización
+     * @param objeto Objeto a añadir a la localización
+     */
+    public void addItem(Item objeto)
+    {
+        objetos.add(objeto);
     }
 
 }

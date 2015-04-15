@@ -39,5 +39,15 @@ public class Item
     {
         return peso;
     }
+    
+    /**
+     * Devuelve una descripción con toda la información del item.
+     * @return La información del objeto.
+     */
+    public String getLongDescription()
+    {
+        String info = "\n- " + descripcionObj + " que pesa " + peso;
+        return info;
+    }
 
 }

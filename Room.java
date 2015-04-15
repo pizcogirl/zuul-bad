@@ -106,7 +106,7 @@ public class Room
             descr += "\nVes los siguientes objetos:";
             for(int i = 0; i < objetos.size(); i++)
             {
-                descr += "\n- " + objetos.get(i).getDescripcionObj() + " que pesa " + objetos.get(i).getPeso();
+                descr += objetos.get(i).getLongDescription();
             }
         }
         else

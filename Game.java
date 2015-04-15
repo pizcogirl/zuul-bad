@@ -19,6 +19,7 @@ public class Game
 {
     private Parser parser;
     private Room currentRoom;
+    private Room lastRoom;
 
     /**
      * Create the game and initialise its internal map.
@@ -71,6 +72,7 @@ public class Game
         salidaObstruida.setExit("noroeste", camaraOculta);
 
         currentRoom = entrada;  // start game outside
+        lastRoom = null;
     }
 
     /**
@@ -135,6 +137,9 @@ public class Game
         else if (commandWord.equals("comer")){
             System.out.println("Acabas de comer y ya no estas hambriento");
         }
+        else if (commandWord.equals("volver")){
+            goLastRoom();
+        }
         return wantToQuit;
     }
 
@@ -171,9 +176,31 @@ public class Game
             System.out.println("No puedes continuar por ahí");
         }
         else {
+            lastRoom = currentRoom;
             currentRoom = nextRoom;
             printLocationInfo();
             System.out.println();
+        }
+    }
+    
+    /**
+     * Intenta ir a la habitación anterior. Si no hay ninguna, devuelve
+     * un mensaje de error.
+     */
+    private void goLastRoom()
+    {
+        // Si existe la habitacion, va a ella y cambia la ultima habitacion por la que se encontraba
+        if(lastRoom != null)
+        {
+            Room nextRoom = lastRoom;
+            lastRoom = currentRoom;
+            currentRoom = nextRoom;
+            printLocationInfo();
+            System.out.println();
+        }
+        else
+        {
+            System.out.println("No puedes continuar por ahí");
         }
     }
 

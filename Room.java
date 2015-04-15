@@ -99,7 +99,7 @@ public class Room
     public String getLongDescription()
     {
         String descr = "";
-        descr = "Estas en " + description + "\nSalidas: " + getExitString();
+        descr = "\nEstas en " + description + "\nSalidas: " + getExitString();
         // Si hay algun objeto en la habitación, lo incluye en la descripción
         if (objetos.size() > 0)
         {

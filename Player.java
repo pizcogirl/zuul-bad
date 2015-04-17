@@ -70,6 +70,25 @@ public class Player
     }
     
     /**
+     * El jugador intenta moverse a otra otra habitación. Si existe una habitación en esa
+     * dirección lo hara, sino imprimira un mensaje avisando de que no puede ir en esa dirección.
+     * @param direccion La direccion en la que intenta moverse
+     */
+    public void goRoom(String direccion)
+    {
+        Room nextRoom = currentRoom.getExit(direccion);
+
+        if (nextRoom == null) {
+            System.out.println("No puedes continuar por ahí");
+        }
+        else {
+            setRoom(nextRoom);
+            printLocationInfo();
+            System.out.println();
+        }
+    }
+    
+    /**
      * Imprime la información de la localización en la que se encuentra el jugador
      */
     private void printLocationInfo()

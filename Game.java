@@ -179,7 +179,7 @@ public class Game
         // Try to leave current room.
         player.goRoom(direction);
     }
-    
+
     /** 
      * Try to take an item.
      */
@@ -196,8 +196,8 @@ public class Game
         // Intenta coger el objeto
         player.addItem(objeto);
     }
-    
-        /** 
+
+    /** 
      * Try to drop an item.
      */
     private void drop(Command command) 
@@ -210,8 +210,8 @@ public class Game
 
         String objeto = command.getSecondWord();
 
-        // Try to leave current room.
-       // player.drop(objeto);
+        // Intenta soltar un objeto
+        player.dropItem(objeto);
     }
 
     /** 

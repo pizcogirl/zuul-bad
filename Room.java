@@ -126,7 +126,7 @@ public class Room
     }
     
     /**
-     * Busca un objeto en la localización actual. Si existe lo devuelve,
+     * Busca un objeto en la localización. Si existe lo devuelve,
      * sino devuelve null.
      * @return El objeto si contiene, null sino.
      */
@@ -135,6 +135,7 @@ public class Room
         boolean find = false;
         int index = 0;
         Item objeto = null;
+        // Busca el objeto en la localización
         while((index < objetos.size()) & (!find))
         {
             if(nombre == objetos.get(index).getDescripcionObj())
@@ -144,6 +145,14 @@ public class Room
             }
         }
         return objeto;
+    }
+    
+    /**
+     * Elimina un objeto de la localización
+     */
+    public void remove(Item objeto)
+    {
+        objetos.remove(objeto);
     }
 
 }

@@ -104,6 +104,7 @@ public class Player
         if(tempObj != null)
         {
             inventory.add(tempObj);
+            currentRoom.remove(tempObj);
         }
         else
         {

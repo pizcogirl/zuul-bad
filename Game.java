@@ -20,8 +20,7 @@ import java.util.Stack;
 public class Game 
 {
     private Parser parser;
-    private Room currentRoom;
-    private Stack<Room> lastRooms;
+    private Player player;
 
     /**
      * Create the game and initialise its internal map.
@@ -30,7 +29,7 @@ public class Game
     {
         createRooms();
         parser = new Parser();
-        lastRooms = new Stack<Room>();
+        player = new Player();
     }
 
     /**
@@ -74,7 +73,7 @@ public class Game
         camaraOculta.setExit("noroeste", caverna);
         salidaObstruida.setExit("noroeste", camaraOculta);
 
-        currentRoom = entrada;  // start game outside
+        player.setRoom(entrada);  // start game outside
     }
 
     /**

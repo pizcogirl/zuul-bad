@@ -110,16 +110,24 @@ public class Player
         Item tempObj = currentRoom.search(objeto);
         if(tempObj != null)
         {
-            if((currentCarry + tempObj.getPeso()) < maxCarry)
+            // Comprueba si el objeto se puede coger
+            if(tempObj.getPuedeCogerse())
             {
-                inventory.add(tempObj);
-                currentRoom.remove(tempObj);
-                System.out.println("Coges " + tempObj.getLongDescription());
-                currentCarry += tempObj.getPeso();
+                if((currentCarry + tempObj.getPeso()) < maxCarry)
+                {
+                    inventory.add(tempObj);
+                    currentRoom.remove(tempObj);
+                    System.out.println("Coges " + tempObj.getLongDescription());
+                    currentCarry += tempObj.getPeso();
+                }
+                else
+                {
+                    System.out.println("Llevas demasiado peso y no puedes coger ese objeto");
+                }
             }
             else
             {
-                System.out.println("Llevas demasiado peso y no puedes coger ese objeto");
+                System.out.println("El objeto no se puede coger");
             }
         }
         else
@@ -148,6 +156,29 @@ public class Player
         {
             System.out.println("No tienes ese objeto en tu inventario");
         }
+    }
+
+    /**
+     * Muestra por pantalla los objetos que lleva en ese momento el jugador.
+     * Sino lleva nada, muestra un mensaje informando de ello.
+     */
+    public void showInventory()
+    {
+        String descr = "";
+        // Si existen objetos en el inventario, los muestra
+        if (inventory.size() > 0)
+        {
+            descr += "\nLlevas en el inventario los siguientes objetos:";
+            for(int i = 0; i < inventory.size(); i++)
+            {
+                descr += "\n- " + inventory.get(i).getLongDescription();
+            }
+        }
+        else
+        {
+            descr += "\nTu inventario esta vacio";
+        }
+        System.out.println(descr);
     }
 
     /**

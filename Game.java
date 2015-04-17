@@ -53,13 +53,13 @@ public class Game
         salidaObstruida = new Room ("un pasillo que termina en una salida de la mazmorra, obstruida por un derrumbamiento");
 
         // Añadimos objetos a las localizaciones
-        entrada.addItem(new Item("piedra", "una piedra enorme", 50F));
-        entrada.addItem(new Item("antorcha", "una antorcha", 0.5F));
-        caverna.addItem(new Item("cubo", "un cubo", 1.0F));
-        bifurcacion.addItem(new Item("piedra", "una piedra", 10.0F));
-        habitacionTesoro.addItem(new Item("monedas", "unas monedas de oro", 1.0F));
-        habitacionTesoro.addItem(new Item("pocion", "una poción", 0.5F));
-        guarida.addItem(new Item("espada", "una espada", 2.0F));
+        entrada.addItem(new Item("piedra", "una piedra enorme", 50F, true));
+        entrada.addItem(new Item("antorcha", "una antorcha", 0.5F, true));
+        caverna.addItem(new Item("cubo", "un cubo", 1.0F, true));
+        bifurcacion.addItem(new Item("piedra", "una piedra", 10.0F, false));
+        habitacionTesoro.addItem(new Item("monedas", "unas monedas de oro", 1.0F, true));
+        habitacionTesoro.addItem(new Item("pocion", "una poción", 0.5F, true));
+        guarida.addItem(new Item("espada", "una espada", 2.0F, true));
 
         // initialise room exits (norte, este, sur, oeste, sureste, noroeste)
         entrada.setExit("este", pasillo);
@@ -150,6 +150,9 @@ public class Game
         }
         else if (commandWord.equals("soltar")){
             drop(command);
+        }
+        else if(commandWord.equals("objetos")){
+            player.showInventory();
         }
         return wantToQuit;
     }

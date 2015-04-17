@@ -39,7 +39,7 @@ public class Player
     /**
      * El jugador vuelve a la habitación anterior
      */
-    public void goLastRoom()
+    public void goBack()
     {
         if(!previusRooms.empty())
         {
@@ -54,9 +54,25 @@ public class Player
     }
     
     /**
+     * El jugador examina la localización en la que se encuentra
+     */
+    public void look()
+    {
+        printLocationInfo();
+    }
+    
+    /**
+     * El jugador come
+     */
+    public void eat()
+    {
+        System.out.println("Acabas de comer y ya no estas hambriento");
+    }
+    
+    /**
      * Imprime la información de la localización en la que se encuentra el jugador
      */
-    public void printLocationInfo()
+    private void printLocationInfo()
     {
         System.out.println(currentRoom.getLongDescription());
     }

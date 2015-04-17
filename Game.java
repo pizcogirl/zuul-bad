@@ -133,13 +133,13 @@ public class Game
             wantToQuit = quit(command);
         }
         else if (commandWord.equals("examinar")){
-            printLocationInfo();
+            player.look();
         }
         else if (commandWord.equals("comer")){
-            System.out.println("Acabas de comer y ya no estas hambriento");
+            player.eat();
         }
         else if (commandWord.equals("volver")){
-            goLastRoom();
+            player.goBack();
         }
         return wantToQuit;
     }

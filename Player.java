@@ -105,6 +105,7 @@ public class Player
         {
             inventory.add(tempObj);
             currentRoom.remove(tempObj);
+            System.out.println("Coges " + tempObj.getLongDescription());
         }
         else
         {

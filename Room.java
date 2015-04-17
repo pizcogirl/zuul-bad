@@ -106,7 +106,7 @@ public class Room
             descr += "\nVes los siguientes objetos:";
             for(int i = 0; i < objetos.size(); i++)
             {
-                descr += objetos.get(i).getLongDescription();
+                descr += "\n- " + objetos.get(i).getLongDescription();
             }
         }
         else
@@ -138,11 +138,12 @@ public class Room
         // Busca el objeto en la localización
         while((index < objetos.size()) & (!find))
         {
-            if(nombre == objetos.get(index).getDescripcionObj())
+            if(nombre.equals(objetos.get(index).getNombreObj()))
             {
                 objeto = objetos.get(index);
                 find = true;
             }
+            index++;
         }
         return objeto;
     }

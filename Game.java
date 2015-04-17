@@ -50,12 +50,12 @@ public class Game
         salidaObstruida = new Room ("un pasillo que termina en una salida de la mazmorra, obstruida por un derrumbamiento");
 
         // Añadimos objetos a las localizaciones
-        entrada.addItem(new Item( "una antorcha", 0.5F));
-        caverna.addItem(new Item("un cubo", 1.0F));
-        bifurcacion.addItem(new Item( "una piedra", 7.0F));
-        habitacionTesoro.addItem(new Item("unas monedas de oro", 1.0F));
-        habitacionTesoro.addItem(new Item("una poción", 0.5F));
-        guarida.addItem(new Item("una espada", 2.0F));
+        entrada.addItem(new Item("antorcha", "una antorcha", 0.5F));
+        caverna.addItem(new Item("cubo", "un cubo", 1.0F));
+        bifurcacion.addItem(new Item("piedra", "una piedra", 7.0F));
+        habitacionTesoro.addItem(new Item("monedas", "unas monedas de oro", 1.0F));
+        habitacionTesoro.addItem(new Item("pocion", "una poción", 0.5F));
+        guarida.addItem(new Item("espada", "una espada", 2.0F));
 
         // initialise room exits (norte, este, sur, oeste, sureste, noroeste)
         entrada.setExit("este", pasillo);
@@ -211,7 +211,7 @@ public class Game
         String objeto = command.getSecondWord();
 
         // Try to leave current room.
-        player.drop(objeto);
+       // player.drop(objeto);
     }
 
     /** 

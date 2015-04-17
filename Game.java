@@ -27,9 +27,9 @@ public class Game
      */
     public Game() 
     {
+        player = new Player();
         createRooms();
         parser = new Parser();
-        player = new Player();
     }
 
     /**
@@ -173,7 +173,6 @@ public class Game
         // Try to leave current room.
         player.goRoom(direction);
     }
-    
 
     /** 
      * "Quit" was entered. Check the rest of the command to see

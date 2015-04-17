@@ -1,4 +1,5 @@
 import java.util.Stack;
+import java.util.ArrayList;
 
 /**
  * Esta clase representa al jugador del juego. Realiza las acciones
@@ -13,6 +14,8 @@ public class Player
     private Room currentRoom;
     // Pila de habitaciones que ha visitado
     private Stack<Room> previusRooms;
+    // Objetos que tiene el jugador
+    private ArrayList<Item> inventory;
 
     /**
      * Constructor del jugador
@@ -21,6 +24,7 @@ public class Player
     {
        currentRoom = null;
        previusRooms = new Stack<Room>();
+       inventory = new ArrayList<Item>();
     }
 
     /**
@@ -85,6 +89,25 @@ public class Player
             setRoom(nextRoom);
             printLocationInfo();
             System.out.println();
+        }
+    }
+    
+    /**
+     * Intenta añadir un objeto al inventario del jugador. Si el objeto existe en la habitacion
+     * y puede cogerlo, lo añadira a su inventario.
+     * @param El nombre del objeto que quiere añadir
+     */
+    public void addItem(String objeto)
+    {
+        // busca el objeto en la habitacion
+        Item tempObj = currentRoom.search(objeto);
+        if(tempObj != null)
+        {
+            inventory.add(tempObj);
+        }
+        else
+        {
+            System.out.println("No encuentras ese objeto en la localización actual");
         }
     }
     

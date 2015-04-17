@@ -141,6 +141,12 @@ public class Game
         else if (commandWord.equals("volver")){
             player.goBack();
         }
+        else if (commandWord.equals("coger")){
+            take(command);
+        }
+        else if (commandWord.equals("soltar")){
+            drop(command);
+        }
         return wantToQuit;
     }
 
@@ -172,6 +178,40 @@ public class Game
 
         // Try to leave current room.
         player.goRoom(direction);
+    }
+    
+    /** 
+     * Try to take an item.
+     */
+    private void take(Command command) 
+    {
+        if(!command.hasSecondWord()) {
+            // if there is no second word, we don't know where to go...
+            System.out.println("¿Que quieres coger?");
+            return;
+        }
+
+        String objeto = command.getSecondWord();
+
+        // Intenta coger el objeto
+        player.addItem(objeto);
+    }
+    
+        /** 
+     * Try to drop an item.
+     */
+    private void drop(Command command) 
+    {
+        if(!command.hasSecondWord()) {
+            // if there is no second word, we don't know where to go...
+            System.out.println("¿Que quieres soltar");
+            return;
+        }
+
+        String objeto = command.getSecondWord();
+
+        // Try to leave current room.
+        player.drop(objeto);
     }
 
     /** 

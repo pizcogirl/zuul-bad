@@ -124,5 +124,26 @@ public class Room
     {
         objetos.add(objeto);
     }
+    
+    /**
+     * Busca un objeto en la localización actual. Si existe lo devuelve,
+     * sino devuelve null.
+     * @return El objeto si contiene, null sino.
+     */
+    public Item search(String nombre)
+    {
+        boolean find = false;
+        int index = 0;
+        Item objeto = null;
+        while((index < objetos.size()) & (!find))
+        {
+            if(nombre == objetos.get(index).getDescripcionObj())
+            {
+                objeto = objetos.get(index);
+                find = true;
+            }
+        }
+        return objeto;
+    }
 
 }

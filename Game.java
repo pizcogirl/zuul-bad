@@ -1,4 +1,5 @@
 import java.util.Stack;
+import java.util.Random;
 
 /**
  *  This class is the main class of the "World of Zuul" application. 
@@ -27,7 +28,9 @@ public class Game
      */
     public Game() 
     {
-        player = new Player();
+        // Por ahora el peso se crea con un random
+        Random rand = new Random();
+        player = new Player(((rand.nextFloat()*20F) +20F));
         createRooms();
         parser = new Parser();
     }
@@ -50,9 +53,10 @@ public class Game
         salidaObstruida = new Room ("un pasillo que termina en una salida de la mazmorra, obstruida por un derrumbamiento");
 
         // Añadimos objetos a las localizaciones
+        entrada.addItem(new Item("piedra", "una piedra enorme", 50F));
         entrada.addItem(new Item("antorcha", "una antorcha", 0.5F));
         caverna.addItem(new Item("cubo", "un cubo", 1.0F));
-        bifurcacion.addItem(new Item("piedra", "una piedra", 7.0F));
+        bifurcacion.addItem(new Item("piedra", "una piedra", 10.0F));
         habitacionTesoro.addItem(new Item("monedas", "unas monedas de oro", 1.0F));
         habitacionTesoro.addItem(new Item("pocion", "una poción", 0.5F));
         guarida.addItem(new Item("espada", "una espada", 2.0F));

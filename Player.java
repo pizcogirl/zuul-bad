@@ -16,15 +16,22 @@ public class Player
     private Stack<Room> previusRooms;
     // Objetos que tiene el jugador
     private ArrayList<Item> inventory;
+    // El peso maximo que acepta el jugador
+    private float maxCarry;
+    // El peso que lleva ahora el jugador
+    private float currentCarry;
 
     /**
      * Constructor del jugador
      */
-    public Player()
+    public Player(float maxCarry)
     {
         currentRoom = null;
         previusRooms = new Stack<Room>();
         inventory = new ArrayList<Item>();
+        this.maxCarry = maxCarry;
+        // Al inicio el peso del jugador es 0.
+        currentCarry = 0;
     }
 
     /**
@@ -94,7 +101,7 @@ public class Player
 
     /**
      * Intenta añadir un objeto al inventario del jugador. Si el objeto existe en la habitacion
-     * y puede cogerlo, lo añadira a su inventario.
+     * y puede cogerlo, lo añadira a su inventario. Sino mostrara un mensaje indicando el problema
      * @param El nombre del objeto que quiere añadir
      */
     public void addItem(String objeto)
@@ -103,9 +110,17 @@ public class Player
         Item tempObj = currentRoom.search(objeto);
         if(tempObj != null)
         {
-            inventory.add(tempObj);
-            currentRoom.remove(tempObj);
-            System.out.println("Coges " + tempObj.getLongDescription());
+            if((currentCarry + tempObj.getPeso()) < maxCarry)
+            {
+                inventory.add(tempObj);
+                currentRoom.remove(tempObj);
+                System.out.println("Coges " + tempObj.getLongDescription());
+                currentCarry += tempObj.getPeso();
+            }
+            else
+            {
+                System.out.println("Llevas demasiado peso y no puedes coger ese objeto");
+            }
         }
         else
         {
@@ -127,6 +142,7 @@ public class Player
             inventory.remove(tempObj);
             currentRoom.addItem(tempObj);
             System.out.println("Sueltas " + tempObj.getLongDescription());
+            currentCarry -= tempObj.getPeso();
         }
         else
         {

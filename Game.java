@@ -1,4 +1,5 @@
 import java.util.Stack;
+import java.util.Random;
 
 /**
  *  This class is the main class of the "World of Zuul" application. 
@@ -27,7 +28,9 @@ public class Game
      */
     public Game() 
     {
-        player = new Player();
+        // Por ahora el peso se crea con un random
+        Random rand = new Random();
+        player = new Player(((rand.nextFloat()*20F) +20F));
         createRooms();
         parser = new Parser();
     }
@@ -50,12 +53,13 @@ public class Game
         salidaObstruida = new Room ("un pasillo que termina en una salida de la mazmorra, obstruida por un derrumbamiento");
 
         // Añadimos objetos a las localizaciones
-        entrada.addItem(new Item( "una antorcha", 0.5F));
-        caverna.addItem(new Item("un cubo", 1.0F));
-        bifurcacion.addItem(new Item( "una piedra", 7.0F));
-        habitacionTesoro.addItem(new Item("unas monedas de oro", 1.0F));
-        habitacionTesoro.addItem(new Item("una poción", 0.5F));
-        guarida.addItem(new Item("una espada", 2.0F));
+        entrada.addItem(new Item("piedra", "una piedra enorme", 50F, true));
+        entrada.addItem(new Item("antorcha", "una antorcha", 0.5F, true));
+        caverna.addItem(new Item("cubo", "un cubo", 1.0F, true));
+        bifurcacion.addItem(new Item("piedra", "una piedra", 10.0F, false));
+        habitacionTesoro.addItem(new Item("monedas", "unas monedas de oro", 1.0F, true));
+        habitacionTesoro.addItem(new Item("pocion", "una poción", 0.5F, true));
+        guarida.addItem(new Item("espada", "una espada", 2.0F, true));
 
         // initialise room exits (norte, este, sur, oeste, sureste, noroeste)
         entrada.setExit("este", pasillo);
@@ -141,6 +145,15 @@ public class Game
         else if (commandWord.equals("volver")){
             player.goBack();
         }
+        else if (commandWord.equals("coger")){
+            take(command);
+        }
+        else if (commandWord.equals("soltar")){
+            drop(command);
+        }
+        else if(commandWord.equals("objetos")){
+            player.showInventory();
+        }
         return wantToQuit;
     }
 
@@ -172,6 +185,40 @@ public class Game
 
         // Try to leave current room.
         player.goRoom(direction);
+    }
+
+    /** 
+     * Try to take an item.
+     */
+    private void take(Command command) 
+    {
+        if(!command.hasSecondWord()) {
+            // if there is no second word, we don't know where to go...
+            System.out.println("¿Que quieres coger?");
+            return;
+        }
+
+        String objeto = command.getSecondWord();
+
+        // Intenta coger el objeto
+        player.addItem(objeto);
+    }
+
+    /** 
+     * Try to drop an item.
+     */
+    private void drop(Command command) 
+    {
+        if(!command.hasSecondWord()) {
+            // if there is no second word, we don't know where to go...
+            System.out.println("¿Que quieres soltar");
+            return;
+        }
+
+        String objeto = command.getSecondWord();
+
+        // Intenta soltar un objeto
+        player.dropItem(objeto);
     }
 
     /** 

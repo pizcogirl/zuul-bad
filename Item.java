@@ -8,20 +8,26 @@
  */
 public class Item
 {
+    // El nombre del objeto;
+    private String nombreObj;
     // Descripcion del objeto
     private String descripcionObj;
     // Peso del objeto
     private float peso;
+    // Indica si el objeto puede o no ser cogido por el jugador
+    private boolean puedeCogerse;
 
     /**
      * Constructor de items. Crea un objeto item con una descripción y un peso dados.
      */
-    public Item(String desc, float peso)
+    public Item( String nombreObj, String desc, float peso, boolean puedeCogerse)
     {
+        this.nombreObj = nombreObj;
         this.descripcionObj = desc;
         this.peso = peso;
+        this.puedeCogerse = puedeCogerse;
     }
-    
+
     /**
      * Devuelve la descripción del objeto.
      * @return La descripción del objeto.
@@ -30,7 +36,7 @@ public class Item
     {
         return descripcionObj;
     }
-    
+
     /**
      * Devuelve el peso del objeto.
      * @return El peso del objeto.
@@ -41,12 +47,30 @@ public class Item
     }
     
     /**
+     * Devuelve el nombre del objeto.
+     * @return El nombre del objeto.
+     */
+    public String getNombreObj()
+    {
+        return nombreObj;
+    }
+    
+    /**
+     * Devuelve si el objeto puede o no cogerse
+     * @return Si el objeto puede o no cogerse
+     */
+    public boolean getPuedeCogerse()
+    {
+        return puedeCogerse;
+    }
+
+    /**
      * Devuelve una descripción con toda la información del item.
      * @return La información del objeto.
      */
     public String getLongDescription()
     {
-        String info = "\n- " + descripcionObj + " que pesa " + peso;
+        String info = descripcionObj + " que pesa " + peso;
         return info;
     }
 

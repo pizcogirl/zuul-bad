@@ -106,7 +106,7 @@ public class Room
             descr += "\nVes los siguientes objetos:";
             for(int i = 0; i < objetos.size(); i++)
             {
-                descr += objetos.get(i).getLongDescription();
+                descr += "\n- " + objetos.get(i).getLongDescription();
             }
         }
         else
@@ -123,6 +123,37 @@ public class Room
     public void addItem(Item objeto)
     {
         objetos.add(objeto);
+    }
+    
+    /**
+     * Busca un objeto en la localización. Si existe lo devuelve,
+     * sino devuelve null.
+     * @return El objeto si contiene, null sino.
+     */
+    public Item search(String nombre)
+    {
+        boolean find = false;
+        int index = 0;
+        Item objeto = null;
+        // Busca el objeto en la localización
+        while((index < objetos.size()) & (!find))
+        {
+            if(nombre.equals(objetos.get(index).getNombreObj()))
+            {
+                objeto = objetos.get(index);
+                find = true;
+            }
+            index++;
+        }
+        return objeto;
+    }
+    
+    /**
+     * Elimina un objeto de la localización
+     */
+    public void remove(Item objeto)
+    {
+        objetos.remove(objeto);
     }
 
 }

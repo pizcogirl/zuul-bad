@@ -121,38 +121,37 @@ public class Game
     {
         boolean wantToQuit = false;
 
-        if(command.isUnknown()) {
-            System.out.println("No entiendo las instrucciones");
-            return false;
-        }
-
-        String commandWord = command.getCommandWord();
-        if (commandWord.equals("ayuda")) {
+        Option commandWord = command.getCommandWord();
+        switch(commandWord){
+            case AYUDA:
             printHelp();
-        }
-        else if (commandWord.equals("ir")) {
+            break;
+            case IR:
             goRoom(command);
-        }
-        else if (commandWord.equals("terminar")) {
+            break;
+            case TERMINAR:
             wantToQuit = quit(command);
-        }
-        else if (commandWord.equals("examinar")){
+            break;
+            case EXAMINAR:
             player.look();
-        }
-        else if (commandWord.equals("comer")){
+            break;
+            case COMER:
             player.eat();
-        }
-        else if (commandWord.equals("volver")){
+            break;
+            case VOLVER:
             player.goBack();
-        }
-        else if (commandWord.equals("coger")){
+            break;
+            case COGER:
             take(command);
-        }
-        else if (commandWord.equals("soltar")){
+            break;
+            case SOLTAR:
             drop(command);
-        }
-        else if(commandWord.equals("objetos")){
+            break;        
+            case OBJETOS:
             player.showInventory();
+            break;
+            case DESCONOCIDO:
+            System.out.println("No entiendo las instrucciones");
         }
         return wantToQuit;
     }
@@ -193,7 +192,7 @@ public class Game
     private void take(Command command) 
     {
         if(!command.hasSecondWord()) {
-            // if there is no second word, we don't know where to go...
+            // if there is no second word, we don't know what to take...
             System.out.println("¿Que quieres coger?");
             return;
         }
@@ -210,7 +209,7 @@ public class Game
     private void drop(Command command) 
     {
         if(!command.hasSecondWord()) {
-            // if there is no second word, we don't know where to go...
+            // if there is no second word, we don't know what to drop...
             System.out.println("¿Que quieres soltar");
             return;
         }

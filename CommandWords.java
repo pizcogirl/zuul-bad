@@ -22,16 +22,10 @@ public class CommandWords
     public CommandWords()
     {
         commands = new ArrayList();
-        commands.add(Option.IR);
-        commands.add(Option.TERMINAR);
-        commands.add(Option.AYUDA);
-        commands.add(Option.EXAMINAR);
-        commands.add(Option.COMER);
-        commands.add(Option.VOLVER);
-        commands.add(Option.COGER);
-        commands.add(Option.SOLTAR);
-        commands.add(Option.OBJETOS);
-        commands.add(Option.DESCONOCIDO);
+        for(Option opt : Option.values())
+        {
+            commands.add(opt);
+        }
     }
 
     /**

@@ -193,7 +193,7 @@ public class Game
     private void take(Command command) 
     {
         if(!command.hasSecondWord()) {
-            // if there is no second word, we don't know where to go...
+            // if there is no second word, we don't know what to take...
             System.out.println("¿Que quieres coger?");
             return;
         }
@@ -210,7 +210,7 @@ public class Game
     private void drop(Command command) 
     {
         if(!command.hasSecondWord()) {
-            // if there is no second word, we don't know where to go...
+            // if there is no second word, we don't know what to drop...
             System.out.println("¿Que quieres soltar");
             return;
         }

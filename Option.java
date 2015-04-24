@@ -6,4 +6,11 @@
  * @version (version number or date here)
  */
 public enum Option {
-    IR, TERMINAR, AYUDA, EXAMINAR, COMER, VOLVER, COGER, SOLTAR, OBJETOS, DESCONOCIDO};
+    IR("ir"), TERMINAR("terminar"), AYUDA ("ayuda"), 
+    EXAMINAR ("examinar"), COMER ("comer"), VOLVER("volver"), 
+    COGER("coger"), SOLTAR("soltar"), OBJETOS("objetos"), DESCONOCIDO("desconocido");
+    private String command;
+    private Option(String command)
+    {this.command = command;}
+ };
+    

@@ -12,5 +12,7 @@ public enum Option {
     private String command;
     private Option(String command)
     {this.command = command;}
+    public String getCommand()
+    {return command;}
  };
     

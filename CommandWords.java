@@ -1,4 +1,4 @@
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.Set;
 /**
  * This class is part of the "World of Zuul" application. 
@@ -14,24 +14,24 @@ import java.util.Set;
 public class CommandWords
 {
     // a constant array that holds all valid command words
-    private HashMap<String, Option> commands;
+    private ArrayList<Option> commands;
 
     /**
      * Constructor - initialise the command words.
      */
     public CommandWords()
     {
-        commands = new HashMap();
-        commands.put("ir", Option.IR);
-        commands.put("terminar", Option.TERMINAR);
-        commands.put("ayuda", Option.AYUDA);
-        commands.put("examinar", Option.EXAMINAR);
-        commands.put("comer", Option.COMER);
-        commands.put("volver", Option.VOLVER);
-        commands.put("coger", Option.COGER);
-        commands.put("soltar", Option.SOLTAR);
-        commands.put("objetos", Option.OBJETOS);
-        commands.put("desconocido", Option.DESCONOCIDO);
+        commands = new ArrayList();
+        commands.add(Option.IR);
+        commands.add(Option.TERMINAR);
+        commands.add(Option.AYUDA);
+        commands.add(Option.EXAMINAR);
+        commands.add(Option.COMER);
+        commands.add(Option.VOLVER);
+        commands.add(Option.COGER);
+        commands.add(Option.SOLTAR);
+        commands.add(Option.OBJETOS);
+        commands.add(Option.DESCONOCIDO);
     }
 
     /**
@@ -41,7 +41,17 @@ public class CommandWords
      */
     public boolean isCommand(String aString)
     {
-            return (commands.containsKey(aString));
+        boolean esComando = false;
+        int index = 0;
+        while(index < commands.size() && !esComando)
+        {
+            if(commands.get(index).getCommand().equals(aString))
+            {
+                esComando = true;
+            }
+            index++;
+        }
+        return esComando;
     }
 
     /**
@@ -50,10 +60,9 @@ public class CommandWords
     public void showAll()
     {
         String validCommands = "Los comandos son: \n";
-        Set<String> keys = commands.keySet();
-        for(String com : keys)
+        for(Option command : commands)
         {
-            validCommands = validCommands + com + " ";
+            validCommands += command.getCommand() + " ";
         }
         System.out.println(validCommands);
     }
@@ -66,10 +75,17 @@ public class CommandWords
      */
     public Option getCommandWord(String commandWord)
     {
-        Option opcion = commands.get(commandWord);
-        if (opcion == null)
+        Option opcion = Option.DESCONOCIDO;
+        boolean encontrado = false;
+        int index = 0;
+        while(index < commands.size() && !encontrado)
         {
-            opcion = Option.DESCONOCIDO;
+            if(commands.get(index).getCommand().equals(commandWord))
+            {
+                opcion = commands.get(index);
+                encontrado = true;
+            }
+            index++;
         }
         return opcion;
     }

@@ -62,9 +62,11 @@ public class Player
 
     /**
      * El jugador vuelve a la habitación anterior. Si esta en combate no puede volver.
+     * @return True si puede volver, false sino.
      */
-    public void goBack()
+    public boolean goBack()
     {
+        boolean volver = false;
         if(!enCombate)
         {
             if(!previusRooms.empty())
@@ -72,6 +74,7 @@ public class Player
                 currentRoom = previusRooms.pop();
                 printLocationInfo();
                 System.out.println();
+                volver = true;
             }
             else
             {
@@ -82,36 +85,45 @@ public class Player
         {
             System.out.println("No puedes hacer eso en combate");
         }
+        return volver;
     }
 
     /**
      * El jugador examina la localización en la que se encuentra. Si esta en combate no puede usarse.
+     * @return True si puede examinar la localización, false sino.
      */
-    public void look()
+    public boolean look()
     {
+        boolean examinar = false;
         if(!enCombate)
         {
             printLocationInfo();
+            examinar = true;
         }
         else
         {
             System.out.println("No puedes hacer eso en combate");
         }
+        return examinar;
     }
 
     /**
      * El jugador come. Si esta en combate no puede usarse.
+     * @return True si puede comer, false sino.
      */
-    public void eat()
+    public boolean eat()
     {
+        boolean comer = false;
         if(!enCombate)
         {
             System.out.println("Acabas de comer y ya no estas hambriento");
+            comer = true;
         }
         else
         {
             System.out.println("No puedes hacer eso en combate");
         }
+        return comer;
     }
 
     /**
@@ -119,9 +131,11 @@ public class Player
      * dirección lo hara, sino imprimira un mensaje avisando de que no puede ir en esa dirección.
      * Si esta en combate no puede ir a otra localización.
      * @param direccion La direccion en la que intenta moverse.
+     * @return True si ha podido desplazarse, false sino.
      */
-    public void goRoom(String direccion)
+    public boolean goRoom(String direccion)
     {
+        boolean desplazarse = false;
         if(!enCombate)
         {
             Room nextRoom = currentRoom.getExit(direccion);
@@ -133,28 +147,34 @@ public class Player
                 setRoom(nextRoom);
                 printLocationInfo();
                 System.out.println();
+                desplazarse = true;
             }
         }
         else
         {
             System.out.println("No puedes hacer eso en combate");
         }
+        return desplazarse;
     }
 
     /**
      * El jugador busca un objeto en la localización. Si lo encuentra lo intenta añadir al inventario.
      * Si lo añade al inventario, desaparece de la localización. Si esta en combate no puede coger objetos del suelo.
      * @param El nombre del objeto a buscar e intentar añadir al inventario.
+     * @return True si ha podido coger el objeto, false sino.
      */
-    public void take(String nombre)
+    public boolean take(String nombre)
     {
+        boolean coger = false;
         if(!enCombate)
         {
             // Busca el objeto en la localizacion
             Item obj = currentRoom.search(nombre);
+            // Si lo encuentra lo añade al inventario
             if(obj != null)
             {
                 addItem(obj);
+                coger = true;
             }
             else
             {
@@ -165,31 +185,37 @@ public class Player
         {
             System.out.println("No puedes hacer eso en combate");
         }
+        return coger;
     }
     
     /**
-     * El jugador intenta equipar un objeto. Sino puede, informa de ello.
+     * El jugador intenta equipar un objeto. Si no puede, informa de ello.
      * Si el jugador suelta el objeto, deja de estar equipado.
      * @param nombre El nombre del objeto a equipar
+     * @return True si ha podido equiparlo, false sino.
      */
-    public void equipar(String nombre)
+    public boolean equipar(String nombre)
     {
+        boolean equipar = false;
         Item objeto = search(nombre);
-        if(objeto != null)
+        if ((objeto != null) && (objeto != equipo))
         {
             equipo = objeto;
             System.out.println("Equipas " + objeto.getNombreObj() + " y te proporciona " + objeto.getAtaque() + " ataque");
+            equipar = true;
         }
         else
         {
             System.out.println("No tienes ese objeto en tu inventario para equiparlo");
         }
+        return equipar;
     }
 
     /**
      * Intenta añadir un objeto al inventario del jugador. Si el objeto existe 
      * y puede cogerlo, lo añadira a su inventario. Sino mostrara un mensaje indicando el problema
      * @param El nombre del objeto que quiere añadir
+     * @return True si ha podido añadir el objeto, false sino.
      */
     public boolean addItem(Item objeto)
     {
@@ -223,9 +249,11 @@ public class Player
      * Intenta soltar un objeto al inventario del jugador. Si el objeto esta en el inventario del jugador
      * lo soltara, sino mostrara un mensaje. Si esta en combate no puede soltar objetos.
      * @param El nombre del objeto que quiere añadir
+     * @return True si el objeto ha podido ser soltado, false sino.
      */
-    public void dropItem(String objeto)
+    public boolean dropItem(String objeto)
     {
+        boolean soltar = false;
         if(!enCombate)
         {
             // busca el objeto en el inventario
@@ -236,6 +264,7 @@ public class Player
                 currentRoom.addItem(tempObj);
                 System.out.println("Sueltas " + tempObj.getLongDescription());
                 currentCarry -= tempObj.getPeso();
+                soltar = true;
                 if(tempObj == equipo)
                 {
                     equipo = null;
@@ -250,6 +279,7 @@ public class Player
         {
             System.out.println("No puedes hacer eso en combate");
         }
+        return soltar;
     }
 
     /**
@@ -280,13 +310,15 @@ public class Player
      * El jugador conversa con el PNJ que se encuentre en la sala. si hay alguno.
      * Sino muestra un mensaje de error. El jugador no puede hablar en combate.
      */
-    public void hablar()
+    public boolean hablar()
     {
+        boolean hablar = false;
         if(!enCombate)
         {
             if(currentRoom.getPNJ() != null)
             {
                 Item obj = currentRoom.getPNJ().hablar();
+                hablar = true;
                 if (obj != null)
                 {
                     boolean exito = addItem(obj);
@@ -305,6 +337,7 @@ public class Player
         {
             System.out.println("No puedes hacer eso en combate");
         }
+        return hablar;
     }
 
     /**
@@ -313,7 +346,7 @@ public class Player
     public void atacar()
     {
         System.out.println("Golpeas a " + getPNJ().getNombre() + " y le haces " + ataque + " puntos de daño");
-        getPNJ().restaRes(ataque);
+        getPNJ().restaRes(getAtaque());
     }
     
     /**

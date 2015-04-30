@@ -139,62 +139,66 @@ public class Game
     {
         boolean wantToQuit = false;
         Option commandWord = command.getCommandWord();
+        // Comprueba si se ha podido ejecutar el comando
+        boolean ejecutado = false;
 
         switch(commandWord){
             case AYUDA:
             printHelp();
             break;
             case IR:
-            goRoom(command);
+            ejecutado = goRoom(command);
             break;
             case TERMINAR:
             wantToQuit = quit(command);
             break;
             case EXAMINAR:
-            player.look();
+            ejecutado = player.look();
             break;
             case COMER:
-            player.eat();
+            ejecutado = player.eat();
             break;
             case VOLVER:
-            player.goBack();
+            ejecutado = player.goBack();
             break;
             case COGER:
-            take(command);
+            ejecutado = take(command);
             break;
             case SOLTAR:
-            drop(command);
+            ejecutado = drop(command);
             break;        
             case OBJETOS:
             player.showInventory();
             break;
             case HABLAR:
-            player.hablar();
+            ejecutado = player.hablar();
             break;
             case ATACAR:
-            atacar();
+            ejecutado = atacar();
             break;
             case EQUIPAR:
-            equipar(command);
+            ejecutado = equipar(command);
             break;
             case DESCONOCIDO:
             System.out.println("No entiendo las instrucciones");
         }
-        if(!(commandWord.esSeguro()))
+        if(!(commandWord.esSeguro()) && (ejecutado))
         {
             emboscada();
+            ataquePNJ();
         }
 
         return wantToQuit;
     }
 
     /**
-     * Resuelve una ronda de combate entre un PNJ y el jugador.
-     * @return Si el combate ha terminado, devuelve true, el PNJ
-     *          ataca y devuelve false.
+     * El jugador intenta atacar al PNJ que haya en la localización.
+     * Fallara si no hay objetivos validos en la localización.
+     * @return True si el ataque se lleva a cabo, false sino.
      */
-    private void atacar()
+    private boolean atacar()
     {
+        boolean atacado = false;
         NPC pnj = player.getPNJ();
         if((pnj != null) && (pnj.isAgresivo()) && (pnj.getResistencia() > 0))
         {
@@ -202,27 +206,32 @@ public class Game
             player.entraEnCombate();
             // El jugador ataca primero
             player.atacar();
+            atacado = true;
             // Comprueba si el PNJ sigue vivo, sino sale de combate
             if ((player.getResistencia() <= 0) || (pnj.getResistencia() <= 0))
             {
                 System.out.println("El combate ha terminado");
                 player.saleDeCombate();
+                if(pnj.getResistencia() <= 0)
+                {
+                    System.out.println("Has derrotado a " + pnj.getNombre());
+                }
             }
             // Si sigue vivo, el PNJ ataca al jugador
             else
             {
-                System.out.println(pnj.getNombre() + " te golpea y te hace " + player.getAtaque() + " puntos de daño");
-                player.sumaResistencia(-1 * (pnj.getAtaque()));
+                ataquePNJ();
             }
         }
         else
         {
             System.out.println("No existen objetivos validos en esta localización");
         }
+        return atacado;
     }
 
     /**
-     * El PNJ embosca al jugador y le golpea
+     * El PNJ embosca al jugador y lo sorprende
      */
     private void emboscada()
     {
@@ -230,17 +239,23 @@ public class Game
         if ((pnj != null) && (pnj.isAgresivo()) && !(player.enCombate()))
         {
             System.out.println("¡" + pnj.getNombre() + " te descubre y se lanza al combate!");
-            System.out.println(pnj.getNombre() + " te golpea y te hace " + player.getAtaque() + " puntos de daño");
-            player.sumaResistencia(-1 * (pnj.getAtaque()));
             // El jugador entra en combate
             player.entraEnCombate();
         }
     }
 
     /**
-     * Print out some help information.
-     * Here we print some stupid, cryptic message and a list of the 
-     * command words.
+     * El PNJ golpea al jugador
+     */
+    private void ataquePNJ()
+    {
+        NPC pnj = player.getPNJ();
+        System.out.println(pnj.getNombre() + " te golpea y te hace " + pnj.getAtaque() + " puntos de daño");
+        player.sumaResistencia(-1 * (pnj.getAtaque()));
+    }
+
+    /**
+     * Muestra la ayuda del juego.
      */
     private void printHelp() 
     {
@@ -248,72 +263,75 @@ public class Game
     }
 
     /** 
-     * Try to go in one direction. If there is an exit, enter
-     * the new room, otherwise print an error message.
+     * Intenta ir en una dirección. Si no hay salida muestra un mensaje de error.
+     * @return True si logra desplazarse en esa dirección, false sino.
      */
-    private void goRoom(Command command) 
+    private boolean goRoom(Command command) 
     {
         if(!command.hasSecondWord()) {
             // if there is no second word, we don't know where to go...
             System.out.println("¿A donde quieres ir?");
-            return;
+            return false;
         }
 
         String direction = command.getSecondWord();
 
         // Try to leave current room.
-        player.goRoom(direction);
+         return (player.goRoom(direction));
     }
 
     /** 
-     * Try to take an item.
+     * Intenta coger un objeto de la localización.
+     * @return True si logra cogerlo, false sino.
      */
-    private void take(Command command) 
+    private boolean take(Command command) 
     {
         if(!command.hasSecondWord()) {
             // if there is no second word, we don't know what to take...
             System.out.println("¿Que quieres coger?");
-            return;
+            return false;
         }
 
         String objeto = command.getSecondWord();
 
         // Intenta coger el objeto
-        player.take(objeto);
+        return (player.take(objeto));
     }
 
     /** 
      * Intenta equipar un objeto.
+     * @return True si logra equipar un objeto, false sino.
      */
-    private void equipar(Command command) 
+    private boolean equipar(Command command) 
     {
         if(!command.hasSecondWord()) {
             // if there is no second word, we don't know what to equip...
             System.out.println("¿Que quieres equipar?");
-            return;
+            return false;
         }
 
         String objeto = command.getSecondWord();
 
         // Intenta equipar el objeto
-        player.equipar(objeto);
+        return (player.equipar(objeto));
     }
 
     /** 
-     * Try to drop an item.
+     * Intenta soltar un objeto.
+     * @return True si logra soltarlo, false sino.
      */
-    private void drop(Command command) 
+    private boolean drop(Command command) 
     {
         if(!command.hasSecondWord()) {
             // if there is no second word, we don't know what to drop...
             System.out.println("¿Que quieres soltar");
-            return;
+            return false;
         }
 
         String objeto = command.getSecondWord();
 
         // Intenta soltar un objeto
-        player.dropItem(objeto);
+        return (player.dropItem(objeto));
     }
 
     /**

@@ -8,7 +8,7 @@
 public enum Option {
     IR("ir"), TERMINAR("terminar"), AYUDA ("ayuda"), 
     EXAMINAR ("examinar"), COMER ("comer"), VOLVER("volver"), 
-    COGER("coger"), SOLTAR("soltar"), OBJETOS("objetos"), DESCONOCIDO("desconocido");
+    COGER("coger"), SOLTAR("soltar"), OBJETOS("objetos"), DESCONOCIDO("desconocido"), HABLAR("hablar");
     private String command;
     private Option(String command)
     {this.command = command;}

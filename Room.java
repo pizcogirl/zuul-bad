@@ -170,5 +170,15 @@ public class Room
     {
         this.pnj = pnj;
     }
+    
+    /**
+     * Devuelve el PNJ que se encuentra en esa localización
+     * @return el PNJ que se encuentra en la licalización. Si no hay ninguno
+     *          devolvera null.
+     */
+    public NPC getPNJ()
+    {
+        return pnj;
+    }
 
 }

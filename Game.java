@@ -41,6 +41,7 @@ public class Game
     private void createRooms()
     {
         Room entrada, pasillo, caverna, bifurcacion, habitacionTesoro, guarida, camaraOculta, salidaObstruida;
+        NPC guerrero;
 
         // create the rooms
         entrada = new Room("la entrada de una mazmorra");
@@ -51,18 +52,25 @@ public class Game
         guarida = new Room("la guarida del monstruo");
         camaraOculta = new Room ("en una sala pequeña, a la que entras por un pequeño boquete");
         salidaObstruida = new Room ("un pasillo que termina en una salida de la mazmorra, obstruida por un derrumbamiento");
-
-        // Añade objetos a las localizaciones
-        entrada.addItem(new Item("piedra", "una piedra enorme", 50F, true));
-        entrada.addItem(new Item("antorcha", "una antorcha", 0.5F, true));
-        caverna.addItem(new Item("cubo", "un cubo", 1.0F, true));
-        bifurcacion.addItem(new Item("piedra", "una piedra", 10.0F, false));
-        habitacionTesoro.addItem(new Item("monedas", "unas monedas de oro", 1.0F, true));
-        habitacionTesoro.addItem(new Item("pocion", "una poción", 0.5F, true));
-        guarida.addItem(new Item("espada", "una espada", 2.0F, true));
         
+        // Crea los PNJs
+        guerrero = new NPC(false, "guerrero", "toma, necesitaras esto", "Un hombre vestido con armadura y expresion seria", 20, 100);
+
         // Añade los PNJ a las localizaciones
-        entrada.addPNJ(new NPC(false, "guerrero", "toma, necesitaras esto", "Un hombre vestido con armadura y expresion seria", 20, 100));
+        entrada.addPNJ(guerrero);
+
+        // Añade objetos a localizaciones
+        entrada.addItem(new Item("piedra", "una piedra enorme", 50F, true));
+        entrada.addItem(new Item("antorcha", "una antorcha encendida", 0.5F, true));
+        caverna.addItem(new Item("cubo", "un cubo de metal", 1.0F, true));
+        bifurcacion.addItem(new Item("piedra", "una piedra de pequeño tamaño", 10.0F, false));
+        habitacionTesoro.addItem(new Item("monedas", "unas monedas de oro brillantes", 1.0F, true));
+        habitacionTesoro.addItem(new Item("pocion", "una poción que cura 20 de resistencia", 0.5F, true));
+        guarida.addItem(new Item("espada", "una espada afilada", 2.0F, true));
+        
+        // Añade objetos a los PNJs
+        guerrero.addItem(new Item("pocion", "una pocion que cura 20 de resistencia", 1.F, true));
+
 
         // initialise room exits (norte, este, sur, oeste, sureste, noroeste)
         entrada.setExit("este", pasillo);
@@ -153,6 +161,9 @@ public class Game
             case OBJETOS:
             player.showInventory();
             break;
+            case HABLAR:
+            player.hablar();
+            break;
             case DESCONOCIDO:
             System.out.println("No entiendo las instrucciones");
         }
@@ -203,7 +214,7 @@ public class Game
         String objeto = command.getSecondWord();
 
         // Intenta coger el objeto
-        player.addItem(objeto);
+        player.take(objeto);
     }
 
     /** 

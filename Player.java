@@ -100,25 +100,43 @@ public class Player
     }
 
     /**
-     * Intenta añadir un objeto al inventario del jugador. Si el objeto existe en la habitacion
+     * El jugador busca un objeto en la localización. Si lo encuentra lo intenta añadir al inventario.
+     * Si lo añade al inventario, desaparece de la localización.
+     * @param El nombre del objeto a buscar e intentar añadir al inventario.
+     */
+    public void take(String nombre)
+    {
+        // Busca el objeto en la localizacion
+        Item obj = currentRoom.search(nombre);
+        if(obj != null)
+        {
+            addItem(obj);
+        }
+        else
+        {
+            System.out.println("No encuentras ese objeto en esta localización");
+        }
+    }
+
+    /**
+     * Intenta añadir un objeto al inventario del jugador. Si el objeto existe 
      * y puede cogerlo, lo añadira a su inventario. Sino mostrara un mensaje indicando el problema
      * @param El nombre del objeto que quiere añadir
      */
-    public void addItem(String objeto)
+    public boolean addItem(Item objeto)
     {
-        // busca el objeto en la habitacion
-        Item tempObj = currentRoom.search(objeto);
-        if(tempObj != null)
+        boolean aniadido = false;
+        if(objeto != null)
         {
             // Comprueba si el objeto se puede coger
-            if(tempObj.getPuedeCogerse())
+            if(objeto.getPuedeCogerse())
             {
-                if((currentCarry + tempObj.getPeso()) < maxCarry)
+                if((currentCarry + objeto.getPeso()) < maxCarry)
                 {
-                    inventory.add(tempObj);
-                    currentRoom.remove(tempObj);
-                    System.out.println("Coges " + tempObj.getLongDescription());
-                    currentCarry += tempObj.getPeso();
+                    inventory.add(objeto);
+                    System.out.println("Coges " + objeto.getLongDescription());
+                    currentCarry += objeto.getPeso();
+                    aniadido = true;
                 }
                 else
                 {
@@ -130,10 +148,7 @@ public class Player
                 System.out.println("El objeto no se puede coger");
             }
         }
-        else
-        {
-            System.out.println("No encuentras ese objeto en la localización actual");
-        }
+        return aniadido;
     }
 
     /**
@@ -179,6 +194,30 @@ public class Player
             descr += "\nTu inventario esta vacio";
         }
         System.out.println(descr);
+    }
+
+    /**
+     * El jugador conversa con el PNJ que se encuentre en la sala. si hay alguno.
+     * Sino muestra un mensaje de error
+     */
+    public void hablar()
+    {
+        if(currentRoom.getPNJ() != null)
+        {
+            Item obj = currentRoom.getPNJ().hablar();
+            if (obj != null)
+            {
+                boolean exito = addItem(obj);
+                if(exito)
+                {
+                    currentRoom.getPNJ().remove(obj);
+                }
+                else
+                {
+                    System.out.println("No puedes recibir el objeto que te intenta dar");
+                }
+            }
+        }
     }
 
     /**

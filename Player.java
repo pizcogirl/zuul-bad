@@ -26,6 +26,8 @@ public class Player
     private int ataque;
     // Recoge si el jugador esta en combate
     private boolean enCombate;
+    // El objeto equipado por el jugador en estos momentos
+    private Item equipo;
 
     /**
      * Constructor del jugador
@@ -40,8 +42,9 @@ public class Player
         currentCarry = 0;
         this.resistencia = resistencia;
         this.ataque = ataque;
-        // El jugador empieza la partida fuera de combate
+        // El jugador empieza la partida fuera de combate y sin equipo
         this.enCombate = false;
+        this.equipo = null;
     }
 
     /**
@@ -175,7 +178,7 @@ public class Player
         if(objeto != null)
         {
             // Comprueba si el objeto se puede coger
-            if(objeto.getPuedeCogerse())
+            if(objeto.puedeCogerse())
             {
                 if((currentCarry + objeto.getPeso()) < maxCarry)
                 {
@@ -341,7 +344,12 @@ public class Player
      */
     public int getAtaque()
     {
-        return ataque;
+        int ataqueTotal = ataque;
+        if(equipo != null)
+        {
+            ataque += equipo.getAtaque();
+        }
+        return ataqueTotal;
     }
 
     /**

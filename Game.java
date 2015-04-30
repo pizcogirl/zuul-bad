@@ -54,7 +54,7 @@ public class Game
         salidaObstruida = new Room ("un pasillo que termina en una salida de la mazmorra, obstruida por un derrumbamiento");
 
         // Crea los PNJs
-        guerrero = new NPC(false, "guerrero", "toma, necesitaras esto", "Un hombre vestido con armadura y expresion seria", 20, 100);
+        guerrero = new NPC(false, "guerrero", "toma, necesitaras esto", "Un hombre vestido con armadura", 20, 100);
         kobold = new NPC(true, "kobold", null, "Un kobold pequeño, armado con un palo", 5, 20);
 
         // Añade los PNJ a las localizaciones
@@ -62,17 +62,17 @@ public class Game
         guarida.addPNJ(kobold);
 
         // Añade objetos a localizaciones
-        entrada.addItem(new Item("piedra", "una piedra enorme", 50F, true));
-        entrada.addItem(new Item("antorcha", "una antorcha encendida", 0.5F, true));
-        caverna.addItem(new Item("cubo", "un cubo de metal", 1.0F, true));
-        bifurcacion.addItem(new Item("piedra", "una piedra de pequeño tamaño", 10.0F, false));
-        habitacionTesoro.addItem(new Item("monedas", "unas monedas de oro brillantes", 1.0F, true));
-        habitacionTesoro.addItem(new Item("pocion", "una poción que cura 20 de resistencia", 0.5F, true));
-        guarida.addItem(new Item("espada", "una espada afilada", 2.0F, true));
+        entrada.addItem(new Item("piedra", "una piedra enorme", 50F, false, 50));
+        entrada.addItem(new Item("antorcha", "una antorcha encendida", 0.5F, true, 2));
+        caverna.addItem(new Item("cubo", "un cubo de metal", 1.0F, true, 1));
+        bifurcacion.addItem(new Item("piedra", "una piedra de pequeño tamaño", 10.0F, false, 5));
+        habitacionTesoro.addItem(new Item("monedas", "unas monedas de oro brillantes", 1.0F, true, 0));
+        habitacionTesoro.addItem(new Item("pocion", "una poción que cura 20 de resistencia", 0.5F, true, -1));
+        guarida.addItem(new Item("espada", "una espada afilada", 2.0F, true, 5));
 
         // Añade objetos a los PNJs
-        guerrero.addItem(new Item("pocion", "una pocion que cura 20 de resistencia", 1.F, true));
-        kobold.addItem(new Item("diamante", "una piedra preciosa muy valiosa", 0.1F, true));
+        guerrero.addItem(new Item("pocion", "una pocion que cura 20 de resistencia", 1.F, true, -1));
+        kobold.addItem(new Item("diamante", "una piedra preciosa muy valiosa", 0.1F, true, 0));
 
         // initialise room exits (norte, este, sur, oeste, sureste, noroeste)
         entrada.setExit("este", pasillo);

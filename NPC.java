@@ -58,6 +58,10 @@ public class NPC
                 obj = search(nombre);
             }
         }
+        else
+        {
+            System.out.println("No puedes hablar con personajes agresivos");
+        }
         return obj;
     }
 

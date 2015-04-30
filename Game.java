@@ -22,6 +22,7 @@ public class Game
 {
     private Parser parser;
     private Player player;
+    private boolean onCombat;
 
     /**
      * Create the game and initialise its internal map.
@@ -30,9 +31,10 @@ public class Game
     {
         // Por ahora el peso se crea con un random
         Random rand = new Random();
-        player = new Player(((rand.nextFloat()*20F) +20F));
+        player = new Player(((rand.nextFloat()*20F) +20F), 50, 5);
         createRooms();
         parser = new Parser();
+        onCombat = false;
     }
 
     /**
@@ -41,7 +43,7 @@ public class Game
     private void createRooms()
     {
         Room entrada, pasillo, caverna, bifurcacion, habitacionTesoro, guarida, camaraOculta, salidaObstruida;
-        NPC guerrero;
+        NPC guerrero, kobold;
 
         // create the rooms
         entrada = new Room("la entrada de una mazmorra");
@@ -52,12 +54,14 @@ public class Game
         guarida = new Room("la guarida del monstruo");
         camaraOculta = new Room ("en una sala pequeña, a la que entras por un pequeño boquete");
         salidaObstruida = new Room ("un pasillo que termina en una salida de la mazmorra, obstruida por un derrumbamiento");
-        
+
         // Crea los PNJs
         guerrero = new NPC(false, "guerrero", "toma, necesitaras esto", "Un hombre vestido con armadura y expresion seria", 20, 100);
+        kobold = new NPC(true, "kobold", null, "Un kobold pequeño, armado con un palo", 5, 20);
 
         // Añade los PNJ a las localizaciones
         entrada.addPNJ(guerrero);
+        guarida.addPNJ(kobold);
 
         // Añade objetos a localizaciones
         entrada.addItem(new Item("piedra", "una piedra enorme", 50F, true));
@@ -67,10 +71,10 @@ public class Game
         habitacionTesoro.addItem(new Item("monedas", "unas monedas de oro brillantes", 1.0F, true));
         habitacionTesoro.addItem(new Item("pocion", "una poción que cura 20 de resistencia", 0.5F, true));
         guarida.addItem(new Item("espada", "una espada afilada", 2.0F, true));
-        
+
         // Añade objetos a los PNJs
         guerrero.addItem(new Item("pocion", "una pocion que cura 20 de resistencia", 1.F, true));
-
+        kobold.addItem(new Item("diamante", "una piedra preciosa muy valiosa", 0.1F, true));
 
         // initialise room exits (norte, este, sur, oeste, sureste, noroeste)
         entrada.setExit("este", pasillo);
@@ -131,43 +135,94 @@ public class Game
     private boolean processCommand(Command command) 
     {
         boolean wantToQuit = false;
-
         Option commandWord = command.getCommandWord();
-        switch(commandWord){
-            case AYUDA:
-            printHelp();
-            break;
-            case IR:
-            goRoom(command);
-            break;
-            case TERMINAR:
-            wantToQuit = quit(command);
-            break;
-            case EXAMINAR:
-            player.look();
-            break;
-            case COMER:
-            player.eat();
-            break;
-            case VOLVER:
-            player.goBack();
-            break;
-            case COGER:
-            take(command);
-            break;
-            case SOLTAR:
-            drop(command);
-            break;        
-            case OBJETOS:
-            player.showInventory();
-            break;
-            case HABLAR:
-            player.hablar();
-            break;
-            case DESCONOCIDO:
-            System.out.println("No entiendo las instrucciones");
+        // Si esta en combate se reducen las opciones
+        if(onCombat)
+        {
+            switch(commandWord){
+                case AYUDA:
+                printHelp();
+                break;
+                case TERMINAR:
+                wantToQuit = quit(command);
+                break;
+                case OBJETOS:
+                player.showInventory();
+                break;
+                case ATACAR:
+                player.atacar();
+                break;
+                case DESCONOCIDO:
+                System.out.println("No entiendo las instrucciones");
+                break;
+                default:
+                System.out.println("No puedes hacer eso en combate");
+            }
+            onCombat = combat();
+        }
+        else
+        {
+            switch(commandWord){
+                case AYUDA:
+                printHelp();
+                break;
+                case IR:
+                goRoom(command);
+                break;
+                case TERMINAR:
+                wantToQuit = quit(command);
+                break;
+                case EXAMINAR:
+                player.look();
+                break;
+                case COMER:
+                player.eat();
+                break;
+                case VOLVER:
+                player.goBack();
+                break;
+                case COGER:
+                take(command);
+                break;
+                case SOLTAR:
+                drop(command);
+                break;        
+                case OBJETOS:
+                player.showInventory();
+                break;
+                case HABLAR:
+                player.hablar();
+                break;
+                case ATACAR:
+                player.atacar();
+                onCombat = combat();
+                break;
+                case DESCONOCIDO:
+                System.out.println("No entiendo las instrucciones");
+            }
         }
         return wantToQuit;
+    }
+
+    /**
+     * Resuelve una ronda de combate entre un PNJ y el jugador.
+     * @return Si el combate ha terminado, devuelve true, el PNJ
+     *          ataca y devuelve false.
+     */
+    private boolean combat()
+    {
+        NPC pnj = player.getPNJ();
+        boolean continua = true;
+        if((player.getResistencia() < 0) || (pnj.getResistencia() < 0))
+        {
+            continua = false;
+        }
+        else
+        {
+            System.out.println(pnj.getNombre() + " te golpea y te hace " + player.getAtaque() + " puntos de daño");
+            player.modificaRes(-1 * (pnj.getAtaque()));
+        }
+        return continua;
     }
 
     // implementations of user commands:

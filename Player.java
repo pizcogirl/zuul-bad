@@ -20,11 +20,15 @@ public class Player
     private float maxCarry;
     // El peso que lleva ahora el jugador
     private float currentCarry;
+    // La resistencia del jugador
+    private int resistencia;
+    // El ataque del jugador
+    private int ataque;
 
     /**
      * Constructor del jugador
      */
-    public Player(float maxCarry)
+    public Player(float maxCarry, int resistencia, int ataque)
     {
         currentRoom = null;
         previusRooms = new Stack<Room>();
@@ -32,6 +36,8 @@ public class Player
         this.maxCarry = maxCarry;
         // Al inicio el peso del jugador es 0.
         currentCarry = 0;
+        this.resistencia = resistencia;
+        this.ataque = ataque;
     }
 
     /**
@@ -218,6 +224,53 @@ public class Player
                 }
             }
         }
+    }
+
+    /**
+     * El jugador ataca al PNJ que se encuentre en la localización
+     */
+    public void atacar()
+    {
+        System.out.println("Golpeas a " + getPNJ().getNombre() + " y le haces " + ataque + " puntos de daño");
+        getPNJ().restaRes(ataque);
+    }
+
+    /**
+     * Modifica la resistencia del PNJ en la cantidad introducida como parametro
+     * @param res La resistencia a añadir o deducir de la resistencia del jugador.
+     *          sera negativa si hay que restarla, positiva para sumar.
+     */
+    public void modificaRes(int res)
+    {
+        resistencia += res; 
+    }
+
+    /**
+     * Devuelve el PNJ que se encuentre en ese momento en la localización con el jugador
+     * @return El PNJ que se encuentre en ese momento en la localización con el jugador,
+     *          o null si no hay ninguno.
+     */
+    public NPC getPNJ()
+    {
+        return currentRoom.getPNJ();
+    }
+
+    /**
+     * Devuelve la resistencia del jugador
+     * @return La resistencia del jugador
+     */
+    public int getResistencia()
+    {
+        return resistencia;
+    }
+    
+    /**
+     * Devuelve el ataque del jugador
+     * @return El ataque del jugador
+     */
+    public int getAtaque()
+    {
+        return ataque;
     }
 
     /**

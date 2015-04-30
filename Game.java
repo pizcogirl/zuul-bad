@@ -107,6 +107,12 @@ public class Game
         while (! finished) {
             Command command = parser.getCommand();
             finished = processCommand(command);
+            // Si la resistencia del jugador llega a 0, muere.
+            if(player.getResistencia() <= 0)
+            {
+                muerte();
+                finished = true;
+            }
         }
         System.out.println("Gracias por jugar, adios");
     }
@@ -269,6 +275,14 @@ public class Game
 
         // Intenta soltar un objeto
         player.dropItem(objeto);
+    }
+    
+    /**
+     * El jugador ha muerto. Muestra un mensaje informando de ello por pantalla.
+     */
+    private void muerte()
+    {
+        System.out.println("Tu personaje ha muerto. Ha terminado la partida");
     }
 
     /** 

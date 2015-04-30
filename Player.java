@@ -236,6 +236,10 @@ public class Player
                 currentRoom.addItem(tempObj);
                 System.out.println("Sueltas " + tempObj.getLongDescription());
                 currentCarry -= tempObj.getPeso();
+                if(tempObj == equipo)
+                {
+                    equipo = null;
+                }
             }
             else
             {
@@ -366,9 +370,18 @@ public class Player
         int ataqueTotal = ataque;
         if(equipo != null)
         {
-            ataque += equipo.getAtaque();
+            ataqueTotal += equipo.getAtaque();
         }
         return ataqueTotal;
+    }
+    
+    /**
+     * Devuelve si el jugador esta o no en combate
+     * @return True si esta en combate, false sino
+     */
+    public boolean enCombate()
+    {
+        return enCombate;
     }
 
     /**

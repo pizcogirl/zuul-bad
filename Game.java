@@ -1,4 +1,3 @@
-import java.util.Stack;
 import java.util.Random;
 
 /**
@@ -125,7 +124,7 @@ public class Game
         System.out.println();
         System.out.println("Bienvenido a World of Zuul!");
         System.out.println("World of Zuul es un nuevo y muy aburrido juego de aventuras");
-        System.out.println("Escribe '" + Option.AYUDA.getCommand() +"' para ver la ayuda");
+        System.out.println("Escribe '" + Option.AYUDA.getComando() +"' para ver la ayuda");
         System.out.println();
         player.look();
         System.out.println();
@@ -181,6 +180,10 @@ public class Game
             case DESCONOCIDO:
             System.out.println("No entiendo las instrucciones");
         }
+        if(!(commandWord.esSeguro()))
+        {
+            emboscada();
+        }
 
         return wantToQuit;
     }
@@ -200,7 +203,7 @@ public class Game
             // El jugador ataca primero
             player.atacar();
             // Comprueba si el PNJ sigue vivo, sino sale de combate
-            if((player.getResistencia() <= 0) || (pnj.getResistencia() <= 0))
+            if ((player.getResistencia() <= 0) || (pnj.getResistencia() <= 0))
             {
                 System.out.println("El combate ha terminado");
                 player.saleDeCombate();
@@ -215,6 +218,22 @@ public class Game
         else
         {
             System.out.println("No existen objetivos validos en esta localización");
+        }
+    }
+
+    /**
+     * El PNJ embosca al jugador y le golpea
+     */
+    private void emboscada()
+    {
+        NPC pnj = player.getPNJ();
+        if ((pnj != null) && (pnj.isAgresivo()) && !(player.enCombate()))
+        {
+            System.out.println("¡" + pnj.getNombre() + " te descubre y se lanza al combate!");
+            System.out.println(pnj.getNombre() + " te golpea y te hace " + player.getAtaque() + " puntos de daño");
+            player.sumaResistencia(-1 * (pnj.getAtaque()));
+            // El jugador entra en combate
+            player.entraEnCombate();
         }
     }
 
@@ -262,7 +281,7 @@ public class Game
         // Intenta coger el objeto
         player.take(objeto);
     }
-    
+
     /** 
      * Intenta equipar un objeto.
      */
@@ -296,7 +315,7 @@ public class Game
         // Intenta soltar un objeto
         player.dropItem(objeto);
     }
-    
+
     /**
      * El jugador ha muerto. Muestra un mensaje informando de ello por pantalla.
      */

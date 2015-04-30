@@ -52,7 +52,7 @@ public class Game
         camaraOculta = new Room ("en una sala pequeña, a la que entras por un pequeño boquete");
         salidaObstruida = new Room ("un pasillo que termina en una salida de la mazmorra, obstruida por un derrumbamiento");
 
-        // Añadimos objetos a las localizaciones
+        // Añade objetos a las localizaciones
         entrada.addItem(new Item("piedra", "una piedra enorme", 50F, true));
         entrada.addItem(new Item("antorcha", "una antorcha", 0.5F, true));
         caverna.addItem(new Item("cubo", "un cubo", 1.0F, true));
@@ -60,6 +60,9 @@ public class Game
         habitacionTesoro.addItem(new Item("monedas", "unas monedas de oro", 1.0F, true));
         habitacionTesoro.addItem(new Item("pocion", "una poción", 0.5F, true));
         guarida.addItem(new Item("espada", "una espada", 2.0F, true));
+        
+        // Añade los PNJ a las localizaciones
+        entrada.addPNJ(new NPC(false, "guerrero", "toma, necesitaras esto", "Un hombre vestido con armadura y expresion seria", 20, 100));
 
         // initialise room exits (norte, este, sur, oeste, sureste, noroeste)
         entrada.setExit("este", pasillo);

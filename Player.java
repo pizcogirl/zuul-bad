@@ -5,7 +5,7 @@ import java.util.ArrayList;
  * Esta clase representa al jugador del juego. Realiza las acciones
  * relacionadas con el (examinar, comer, etc).
  * 
- * @author (your name) 
+ * @author Julia Zuara 
  * @version (a version number or a date)
  */
 public class Player
@@ -24,6 +24,8 @@ public class Player
     private int resistencia;
     // El ataque del jugador
     private int ataque;
+    // Recoge si el jugador esta en combate
+    private boolean enCombate;
 
     /**
      * Constructor del jugador
@@ -38,6 +40,8 @@ public class Player
         currentCarry = 0;
         this.resistencia = resistencia;
         this.ataque = ataque;
+        // El jugador empieza la partida fuera de combate
+        this.enCombate = false;
     }
 
     /**
@@ -54,73 +58,109 @@ public class Player
     }
 
     /**
-     * El jugador vuelve a la habitación anterior
+     * El jugador vuelve a la habitación anterior. Si esta en combate no puede volver.
      */
     public void goBack()
     {
-        if(!previusRooms.empty())
+        if(!enCombate)
         {
-            currentRoom = previusRooms.pop();
-            printLocationInfo();
-            System.out.println();
+            if(!previusRooms.empty())
+            {
+                currentRoom = previusRooms.pop();
+                printLocationInfo();
+                System.out.println();
+            }
+            else
+            {
+                System.out.println("No existen localizaciones a las que volver");
+            }
         }
         else
         {
-            System.out.println("No existen localizaciones a las que volver");
+            System.out.println("No puedes hacer eso en combate");
         }
     }
 
     /**
-     * El jugador examina la localización en la que se encuentra
+     * El jugador examina la localización en la que se encuentra. Si esta en combate no puede usarse.
      */
     public void look()
     {
-        printLocationInfo();
+        if(!enCombate)
+        {
+            printLocationInfo();
+        }
+        else
+        {
+            System.out.println("No puedes hacer eso en combate");
+        }
     }
 
     /**
-     * El jugador come
+     * El jugador come. Si esta en combate no puede usarse.
      */
     public void eat()
     {
-        System.out.println("Acabas de comer y ya no estas hambriento");
+        if(!enCombate)
+        {
+            System.out.println("Acabas de comer y ya no estas hambriento");
+        }
+        else
+        {
+            System.out.println("No puedes hacer eso en combate");
+        }
     }
 
     /**
-     * El jugador intenta moverse a otra otra habitación. Si existe una habitación en esa
+     * El jugador intenta moverse a otra otra localización. Si existe una localización en esa
      * dirección lo hara, sino imprimira un mensaje avisando de que no puede ir en esa dirección.
-     * @param direccion La direccion en la que intenta moverse
+     * Si esta en combate no puede ir a otra localización.
+     * @param direccion La direccion en la que intenta moverse.
      */
     public void goRoom(String direccion)
     {
-        Room nextRoom = currentRoom.getExit(direccion);
+        if(!enCombate)
+        {
+            Room nextRoom = currentRoom.getExit(direccion);
 
-        if (nextRoom == null) {
-            System.out.println("No puedes continuar por ahí");
+            if (nextRoom == null) {
+                System.out.println("No puedes continuar por ahí");
+            }
+            else {
+                setRoom(nextRoom);
+                printLocationInfo();
+                System.out.println();
+            }
         }
-        else {
-            setRoom(nextRoom);
-            printLocationInfo();
-            System.out.println();
+        else
+        {
+            System.out.println("No puedes hacer eso en combate");
         }
     }
 
     /**
      * El jugador busca un objeto en la localización. Si lo encuentra lo intenta añadir al inventario.
-     * Si lo añade al inventario, desaparece de la localización.
+     * Si lo añade al inventario, desaparece de la localización. Si esta en combate no puede coger objetos del suelo.
      * @param El nombre del objeto a buscar e intentar añadir al inventario.
      */
     public void take(String nombre)
     {
-        // Busca el objeto en la localizacion
-        Item obj = currentRoom.search(nombre);
-        if(obj != null)
+        if(!enCombate)
         {
-            addItem(obj);
+            // Busca el objeto en la localizacion
+            Item obj = currentRoom.search(nombre);
+            if(obj != null)
+            {
+                addItem(obj);
+            }
+            else
+            {
+                System.out.println("No encuentras ese objeto en esta localización");
+            }
         }
         else
         {
-            System.out.println("No encuentras ese objeto en esta localización");
+            System.out.println("No puedes hacer eso en combate");
         }
     }
 
@@ -159,29 +199,37 @@ public class Player
 
     /**
      * Intenta soltar un objeto al inventario del jugador. Si el objeto esta en el inventario del jugador
-     * lo soltara, sino mostrara un mensaje.
+     * lo soltara, sino mostrara un mensaje. Si esta en combate no puede soltar objetos.
      * @param El nombre del objeto que quiere añadir
      */
     public void dropItem(String objeto)
     {
-        // busca el objeto en el inventario
-        Item tempObj = search(objeto);
-        if(tempObj != null)
+        if(!enCombate)
         {
-            inventory.remove(tempObj);
-            currentRoom.addItem(tempObj);
-            System.out.println("Sueltas " + tempObj.getLongDescription());
-            currentCarry -= tempObj.getPeso();
+            // busca el objeto en el inventario
+            Item tempObj = search(objeto);
+            if(tempObj != null)
+            {
+                inventory.remove(tempObj);
+                currentRoom.addItem(tempObj);
+                System.out.println("Sueltas " + tempObj.getLongDescription());
+                currentCarry -= tempObj.getPeso();
+            }
+            else
+            {
+                System.out.println("No tienes ese objeto en tu inventario");
+            }
         }
         else
         {
-            System.out.println("No tienes ese objeto en tu inventario");
+            System.out.println("No puedes hacer eso en combate");
         }
     }
 
     /**
      * Muestra por pantalla los objetos que lleva en ese momento el jugador.
-     * Sino lleva nada, muestra un mensaje informando de ello.
+     * Si no lleva nada, muestra un mensaje informando de ello. El jugador puede 
+     * examinar su inventario en combate.
      */
     public void showInventory()
     {
@@ -204,25 +252,32 @@ public class Player
 
     /**
      * El jugador conversa con el PNJ que se encuentre en la sala. si hay alguno.
-     * Sino muestra un mensaje de error
+     * Sino muestra un mensaje de error. El jugador no puede hablar en combate.
      */
     public void hablar()
     {
-        if(currentRoom.getPNJ() != null)
+        if(!enCombate)
         {
-            Item obj = currentRoom.getPNJ().hablar();
-            if (obj != null)
+            if(currentRoom.getPNJ() != null)
             {
-                boolean exito = addItem(obj);
-                if(exito)
+                Item obj = currentRoom.getPNJ().hablar();
+                if (obj != null)
                 {
-                    currentRoom.getPNJ().remove(obj);
-                }
-                else
-                {
-                    System.out.println("No puedes recibir el objeto que te intenta dar");
+                    boolean exito = addItem(obj);
+                    if(exito)
+                    {
+                        currentRoom.getPNJ().remove(obj);
+                    }
+                    else
+                    {
+                        System.out.println("No puedes recibir el objeto que te intenta dar");
+                    }
                 }
             }
+        }
+        else
+        {
+            System.out.println("No puedes hacer eso en combate");
         }
     }
 
@@ -234,13 +289,29 @@ public class Player
         System.out.println("Golpeas a " + getPNJ().getNombre() + " y le haces " + ataque + " puntos de daño");
         getPNJ().restaRes(ataque);
     }
+    
+    /**
+     * Introduce al jugador en combate
+     */
+    public void entraEnCombate()
+    {
+        enCombate = true;
+    }
+    
+    /**
+     * Saca al jugador de combate
+     */
+    public void saleDeCombate()
+    {
+        enCombate = false;
+    }
 
     /**
-     * Modifica la resistencia del PNJ en la cantidad introducida como parametro
-     * @param res La resistencia a añadir o deducir de la resistencia del jugador.
-     *          sera negativa si hay que restarla, positiva para sumar.
+     * Suma a la resistencia del jugador en la cantidad introducida como parametro
+     * @param res La resistencia a añadir a la resistencia del jugador.
+     *              Sera negativa si hay que disminuirla, positiva para aumentarla.
      */
-    public void modificaRes(int res)
+    public void sumaResistencia(int res)
     {
         resistencia += res; 
     }
@@ -263,7 +334,7 @@ public class Player
     {
         return resistencia;
     }
-    
+
     /**
      * Devuelve el ataque del jugador
      * @return El ataque del jugador

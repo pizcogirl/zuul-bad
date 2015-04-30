@@ -22,7 +22,6 @@ public class Game
 {
     private Parser parser;
     private Player player;
-    private boolean onCombat;
 
     /**
      * Create the game and initialise its internal map.
@@ -34,7 +33,6 @@ public class Game
         player = new Player(((rand.nextFloat()*20F) +20F), 50, 5);
         createRooms();
         parser = new Parser();
-        onCombat = false;
     }
 
     /**
@@ -136,71 +134,45 @@ public class Game
     {
         boolean wantToQuit = false;
         Option commandWord = command.getCommandWord();
-        // Si esta en combate se reducen las opciones
-        if(onCombat)
-        {
-            switch(commandWord){
-                case AYUDA:
-                printHelp();
-                break;
-                case TERMINAR:
-                wantToQuit = quit(command);
-                break;
-                case OBJETOS:
-                player.showInventory();
-                break;
-                case ATACAR:
-                player.atacar();
-                break;
-                case DESCONOCIDO:
-                System.out.println("No entiendo las instrucciones");
-                break;
-                default:
-                System.out.println("No puedes hacer eso en combate");
-            }
-            onCombat = combat();
+
+        switch(commandWord){
+            case AYUDA:
+            printHelp();
+            break;
+            case IR:
+            goRoom(command);
+            break;
+            case TERMINAR:
+            wantToQuit = quit(command);
+            break;
+            case EXAMINAR:
+            player.look();
+            break;
+            case COMER:
+            player.eat();
+            break;
+            case VOLVER:
+            player.goBack();
+            break;
+            case COGER:
+            take(command);
+            break;
+            case SOLTAR:
+            drop(command);
+            break;        
+            case OBJETOS:
+            player.showInventory();
+            break;
+            case HABLAR:
+            player.hablar();
+            break;
+            case ATACAR:
+            atacar();
+            break;
+            case DESCONOCIDO:
+            System.out.println("No entiendo las instrucciones");
         }
-        else
-        {
-            switch(commandWord){
-                case AYUDA:
-                printHelp();
-                break;
-                case IR:
-                goRoom(command);
-                break;
-                case TERMINAR:
-                wantToQuit = quit(command);
-                break;
-                case EXAMINAR:
-                player.look();
-                break;
-                case COMER:
-                player.eat();
-                break;
-                case VOLVER:
-                player.goBack();
-                break;
-                case COGER:
-                take(command);
-                break;
-                case SOLTAR:
-                drop(command);
-                break;        
-                case OBJETOS:
-                player.showInventory();
-                break;
-                case HABLAR:
-                player.hablar();
-                break;
-                case ATACAR:
-                player.atacar();
-                onCombat = combat();
-                break;
-                case DESCONOCIDO:
-                System.out.println("No entiendo las instrucciones");
-            }
-        }
+
         return wantToQuit;
     }
 
@@ -209,23 +181,33 @@ public class Game
      * @return Si el combate ha terminado, devuelve true, el PNJ
      *          ataca y devuelve false.
      */
-    private boolean combat()
+    private void atacar()
     {
         NPC pnj = player.getPNJ();
-        boolean continua = true;
-        if((player.getResistencia() < 0) || (pnj.getResistencia() < 0))
+        if((pnj != null) && (pnj.isAgresivo()) && (pnj.getResistencia() > 0))
         {
-            continua = false;
+            // El jugador entra en combate
+            player.entraEnCombate();
+            // El jugador ataca primero
+            player.atacar();
+            // Comprueba si el PNJ sigue vivo, sino sale de combate
+            if((player.getResistencia() <= 0) || (pnj.getResistencia() <= 0))
+            {
+                System.out.println("El combate ha terminado");
+                player.saleDeCombate();
+            }
+            // Si sigue vivo, el PNJ ataca al jugador
+            else
+            {
+                System.out.println(pnj.getNombre() + " te golpea y te hace " + player.getAtaque() + " puntos de daño");
+                player.sumaResistencia(-1 * (pnj.getAtaque()));
+            }
         }
         else
         {
-            System.out.println(pnj.getNombre() + " te golpea y te hace " + player.getAtaque() + " puntos de daño");
-            player.modificaRes(-1 * (pnj.getAtaque()));
+            System.out.println("No existen objetivos validos en esta localización");
         }
-        return continua;
     }
-
-    // implementations of user commands:
 
     /**
      * Print out some help information.

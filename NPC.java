@@ -50,4 +50,54 @@ public class NPC
     {
         resistencia -= res;
     }
+    
+    /**
+     * Devuelve un objeto del inventario indicado por parametro
+     * @param nombre El nombre del objeto a entregar
+     * @return El objeto una vez encontrado
+     */
+    public Item search(String nombre)
+    {
+        boolean encontrado = false;
+        Item objeto = null;
+        int index = 0;
+        // Busca el objeto en el inventario, si lo encuentra lo devuelve
+        while((index < inventario.size()) && !(encontrado))
+        {
+            if(inventario.get(index).getNombreObj().equals(nombre))
+            {
+                objeto = inventario.get(index);
+                encontrado = true;
+            }
+            index++;
+        }
+        return objeto;
+    }
+    
+    /**
+     * Elimina un objeto del inventario del PNJ pasado como parametro
+     * @param obj El objeto a eliminar del inventario
+     */
+    public void remove(Item obj)
+    {
+        inventario.remove(obj);
+    }
+    
+    /**
+     * Devuelve la resistencia del PNJ
+     * @return La resisencia del PNJ
+     */
+    public int getResistencia()
+    {
+        return resistencia;
+    }
+    
+    /**
+     * Devuelve el ataque del PNJ
+     * @return El ataque del PNJ
+     */
+    public int getAtaque()
+    {
+        return ataque;
+    }
 }

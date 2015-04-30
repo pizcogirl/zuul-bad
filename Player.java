@@ -166,6 +166,25 @@ public class Player
             System.out.println("No puedes hacer eso en combate");
         }
     }
+    
+    /**
+     * El jugador intenta equipar un objeto. Sino puede, informa de ello.
+     * Si el jugador suelta el objeto, deja de estar equipado.
+     * @param nombre El nombre del objeto a equipar
+     */
+    public void equipar(String nombre)
+    {
+        Item objeto = search(nombre);
+        if(objeto != null)
+        {
+            equipo = objeto;
+            System.out.println("Equipas " + objeto.getNombreObj() + " y te proporciona " + objeto.getAtaque() + " ataque");
+        }
+        else
+        {
+            System.out.println("No tienes ese objeto en tu inventario para equiparlo");
+        }
+    }
 
     /**
      * Intenta añadir un objeto al inventario del jugador. Si el objeto existe 

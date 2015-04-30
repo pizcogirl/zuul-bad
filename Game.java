@@ -175,6 +175,9 @@ public class Game
             case ATACAR:
             atacar();
             break;
+            case EQUIPAR:
+            equipar(command);
+            break;
             case DESCONOCIDO:
             System.out.println("No entiendo las instrucciones");
         }
@@ -258,6 +261,23 @@ public class Game
 
         // Intenta coger el objeto
         player.take(objeto);
+    }
+    
+    /** 
+     * Intenta equipar un objeto.
+     */
+    private void equipar(Command command) 
+    {
+        if(!command.hasSecondWord()) {
+            // if there is no second word, we don't know what to equip...
+            System.out.println("¿Que quieres equipar?");
+            return;
+        }
+
+        String objeto = command.getSecondWord();
+
+        // Intenta equipar el objeto
+        player.equipar(objeto);
     }
 
     /** 

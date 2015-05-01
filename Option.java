@@ -6,31 +6,33 @@
  * @version (version number or date here)
  */
 public enum Option {
-    IR("ir", true), 
+    IR("ir", true), 
 
-    TERMINAR("terminar", true), 
+    TERMINAR("terminar", true), 
 
     AYUDA ("ayuda", true), 
 
-    EXAMINAR ("examinar", true), 
+    EXAMINAR ("examinar", true), 
 
-    COMER ("comer", false), 
+    COMER ("comer", false), 
 
-    VOLVER("volver", true), 
+    VOLVER("volver", true), 
 
     COGER("coger", false), 
 
-    SOLTAR("soltar", false), 
+    SOLTAR("soltar", false), 
 
-    OBJETOS("objetos", false), 
+    OBJETOS("objetos", false), 
 
     DESCONOCIDO("desconocido", true),
 
-    HABLAR("hablar", false), 
+    HABLAR("hablar", false), 
 
-    ATACAR("atacar", true), 
+    ATACAR("atacar", true), 
 
-    EQUIPAR("equipar", false);
+    EQUIPAR("equipar", false),
+
+    SAQUEAR("saquear", false);
     private String comando;
     private boolean seguro;
     private Option(String comando, boolean seguro)

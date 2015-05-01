@@ -1,5 +1,6 @@
 import java.util.Stack;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 /**
  * Esta clase representa al jugador del juego. Realiza las acciones
@@ -89,22 +90,11 @@ public class Player
     }
 
     /**
-     * El jugador examina la localización en la que se encuentra. Si esta en combate no puede usarse.
-     * @return True si puede examinar la localización, false sino.
+     * El jugador examina la localización en la que se encuentra. Puedes examinar en combate.
      */
-    public boolean look()
+    public void look()
     {
-        boolean examinar = false;
-        if(!enCombate)
-        {
             printLocationInfo();
-            examinar = true;
-        }
-        else
-        {
-            System.out.println("No puedes hacer eso en combate");
-        }
-        return examinar;
     }
 
     /**
@@ -175,6 +165,7 @@ public class Player
             {
                 addItem(obj);
                 coger = true;
+                currentRoom.remove(obj);
             }
             else
             {
@@ -187,7 +178,7 @@ public class Player
         }
         return coger;
     }
-    
+
     /**
      * El jugador intenta equipar un objeto. Si no puede, informa de ello.
      * Si el jugador suelta el objeto, deja de estar equipado.
@@ -201,7 +192,7 @@ public class Player
         if ((objeto != null) && (objeto != equipo))
         {
             equipo = objeto;
-            System.out.println("Equipas " + objeto.getNombreObj() + " y te proporciona " + objeto.getAtaque() + " ataque");
+            System.out.println("\nEquipas " + objeto.getNombreObj() + " y te proporciona " + objeto.getAtaque() + " ataque");
             equipar = true;
         }
         else
@@ -209,6 +200,37 @@ public class Player
             System.out.println("No tienes ese objeto en tu inventario para equiparlo");
         }
         return equipar;
+    }
+
+    /**
+     * El jugador intenta saquear el cuerpo de un enemigo caido. Si no puede añadir alguno
+     * de los objetos saqueados informa de ello.
+     * @return True si ha podido saquear todos los objetos, false sino.
+     */
+    public boolean saquear()
+    {
+        boolean saqueado = false;
+        // Toma el inventario del PNJ
+        ArrayList<Item> loot = getPNJ().saquear();
+        // Intenta añadir cada objeto al inventario del PNJ
+        if(loot != null)
+        {
+            Iterator<Item> it = loot.iterator();
+            while(it.hasNext())
+            {
+                Item item = it.next();
+                saqueado = addItem(item);
+                if(saqueado)
+                {
+                    it.remove();
+                }
+            }
+        }
+        else
+        {
+            System.out.println("Aqui no hay nada que saquear");
+        }
+        return saqueado;
     }
 
     /**
@@ -345,10 +367,10 @@ public class Player
      */
     public void atacar()
     {
-        System.out.println("Golpeas a " + getPNJ().getNombre() + " y le haces " + ataque + " puntos de daño");
+        System.out.println("\nGolpeas a " + getPNJ().getNombre() + " y le haces " + getAtaque() + " puntos de daño");
         getPNJ().restaRes(getAtaque());
     }
-    
+
     /**
      * Introduce al jugador en combate
      */
@@ -356,7 +378,7 @@ public class Player
     {
         enCombate = true;
     }
-    
+
     /**
      * Saca al jugador de combate
      */
@@ -407,7 +429,7 @@ public class Player
         }
         return ataqueTotal;
     }
-    
+
     /**
      * Devuelve si el jugador esta o no en combate
      * @return True si esta en combate, false sino

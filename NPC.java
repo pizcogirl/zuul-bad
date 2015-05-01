@@ -141,7 +141,7 @@ public class NPC
     {
         return nombre;
     }
-    
+
     /**
      * Devuelve si el PNJ es agresivo o no
      * @return True si es agresivo, false sino
@@ -150,7 +150,33 @@ public class NPC
     {
         return agresivo;
     }
-    
+
+    /**
+     * Devuelve el inventario del PNJ si esta muerto, null sino
+     * @return El inventario del PNJ si esta muerto, null sino
+     */
+    public ArrayList<Item> saquear()
+    {
+        if(resistencia > 0)
+        {
+            return null;
+        }
+        else
+        {
+            return inventario;
+        }
+    }
+
+    /**
+     * Cambia el estado del PNJ al morir. Ya no es agresivo y su descripcion cambia
+     * para indicar que esta muerto.
+     */
+    public void estaMuerto()
+    {
+        agresivo = false;
+        descripcion = nombre + " muerto";
+    }
+
     /**
      * Devuelve un String con la información del PNJ
      * @return un String con la información del PNJ
@@ -160,11 +186,18 @@ public class NPC
         String desc = "";
         if(!agresivo)
         {
-            desc = nombre + ", " +descripcion + " (amistoso)";
+            if (resistencia > 0)
+            {
+                desc = nombre + ", " + descripcion + " [amistoso]";
+            }
+            else
+            {
+                desc = nombre + ", " + descripcion;
+            }
         }
         else
         {
-            desc = nombre + ", " +descripcion + " (agresivo)";
+            desc = nombre + ", " + descripcion + " [agresivo]";
         }
         return desc;
     }

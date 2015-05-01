@@ -40,7 +40,7 @@ public class Game
     private void createRooms()
     {
         Room entrada, pasillo, caverna, bifurcacion, habitacionTesoro, guarida, camaraOculta, salidaObstruida;
-        NPC guerrero, kobold;
+        NPC granjero, kobold, dragon;
 
         // create the rooms
         entrada = new Room("la entrada de una mazmorra");
@@ -53,12 +53,14 @@ public class Game
         salidaObstruida = new Room ("un pasillo que termina en una salida de la mazmorra, obstruida por un derrumbamiento");
 
         // Crea los PNJs
-        guerrero = new NPC(false, "guerrero", "toma, necesitaras esto", "Un hombre vestido con armadura", 20, 100);
+        granjero = new NPC(false, "granjero", "suerte, yo me quedo aqui", "Un granjero asustado de los alrededores", 1, 30);
         kobold = new NPC(true, "kobold", null, "Un kobold pequeño, armado con un palo", 5, 20);
+        dragon = new NPC(true, "dragon", null, "Un dragon de aspecto fiero", 20, 200);
 
         // Añade los PNJ a las localizaciones
-        entrada.addPNJ(guerrero);
+        entrada.addPNJ(granjero);
         guarida.addPNJ(kobold);
+        habitacionTesoro.addPNJ(dragon);
 
         // Añade objetos a localizaciones
         entrada.addItem(new Item("piedra", "una piedra enorme", 50F, false, 50));
@@ -70,7 +72,7 @@ public class Game
         guarida.addItem(new Item("espada", "una espada afilada", 2.0F, true, 5));
 
         // Añade objetos a los PNJs
-        guerrero.addItem(new Item("pocion", "una pocion que cura 20 de resistencia", 1.F, true, -1));
+        granjero.addItem(new Item("pocion", "una pocion que cura 20 de resistencia", 1.F, true, -1));
         kobold.addItem(new Item("diamante", "una piedra preciosa muy valiosa", 0.1F, true, 0));
 
         // initialise room exits (norte, este, sur, oeste, sureste, noroeste)
@@ -113,7 +115,7 @@ public class Game
                 finished = true;
             }
         }
-        System.out.println("Gracias por jugar, adios");
+        System.out.println("\nGracias por jugar, adios");
     }
 
     /**
@@ -153,7 +155,7 @@ public class Game
             wantToQuit = quit(command);
             break;
             case EXAMINAR:
-            ejecutado = player.look();
+            player.look();
             break;
             case COMER:
             ejecutado = player.eat();
@@ -178,6 +180,9 @@ public class Game
             break;
             case EQUIPAR:
             ejecutado = equipar(command);
+            break;
+            case SAQUEAR:
+            ejecutado = player.saquear();
             break;
             case DESCONOCIDO:
             System.out.println("No entiendo las instrucciones");
@@ -210,7 +215,8 @@ public class Game
             // Comprueba si el PNJ sigue vivo, sino sale de combate
             if ((player.getResistencia() <= 0) || (pnj.getResistencia() <= 0))
             {
-                System.out.println("El combate ha terminado");
+                System.out.println("\nEl combate ha terminado");
+                pnj.estaMuerto();
                 player.saleDeCombate();
                 if(pnj.getResistencia() <= 0)
                 {
@@ -238,7 +244,7 @@ public class Game
         NPC pnj = player.getPNJ();
         if ((pnj != null) && (pnj.isAgresivo()) && !(player.enCombate()))
         {
-            System.out.println("¡" + pnj.getNombre() + " te descubre y se lanza al combate!");
+            System.out.println("\n¡" + pnj.getNombre() + " te descubre y se lanza al combate!");
             // El jugador entra en combate
             player.entraEnCombate();
         }
@@ -250,8 +256,11 @@ public class Game
     private void ataquePNJ()
     {
         NPC pnj = player.getPNJ();
-        System.out.println(pnj.getNombre() + " te golpea y te hace " + pnj.getAtaque() + " puntos de daño");
-        player.sumaResistencia(-1 * (pnj.getAtaque()));
+        if(pnj.isAgresivo())
+        {
+            System.out.println(pnj.getNombre() + " te golpea y te hace " + pnj.getAtaque() + " puntos de daño");
+            player.sumaResistencia(-1 * (pnj.getAtaque()));
+        }
     }
 
     /**
@@ -277,7 +286,7 @@ public class Game
         String direction = command.getSecondWord();
 
         // Try to leave current room.
-         return (player.goRoom(direction));
+        return (player.goRoom(direction));
     }
 
     /** 
@@ -339,7 +348,7 @@ public class Game
      */
     private void muerte()
     {
-        System.out.println("Tu personaje ha muerto. Ha terminado la partida");
+        System.out.println("\nTu personaje ha muerto. Ha terminado la partida");
     }
 
     /** 

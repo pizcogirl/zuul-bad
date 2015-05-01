@@ -29,7 +29,8 @@ public class Player
     private boolean enCombate;
     // El objeto equipado por el jugador en estos momentos
     private Item equipo;
-
+    // La resistencia maxima del jugador
+    private final int maxResistencia;
     /**
      * Constructor del jugador
      */
@@ -46,6 +47,8 @@ public class Player
         // El jugador empieza la partida fuera de combate y sin equipo
         this.enCombate = false;
         this.equipo = null;
+        // La resistencia maxima se asigna al crear al jugador
+        this.maxResistencia = resistencia;
     }
 
     /**
@@ -94,7 +97,7 @@ public class Player
      */
     public void look()
     {
-            printLocationInfo();
+        printLocationInfo();
     }
 
     /**
@@ -234,9 +237,41 @@ public class Player
     }
 
     /**
+     * Intenta usar un objeto del inventario del jugador. Si el objeto existe
+     * y puede usarlo, tendra un efecto sobre el jugador. Sino mostrara un mensaje indicando el problema.
+     * @param nombre El nombre del objeto a usar
+     * @return True si ha podido usarlo, false sino.
+     */
+    public boolean usar(String nombre)
+    {
+        boolean usar = false;
+        // Busca el objeto en el inventario
+        Item obj = search(nombre);
+        if(obj != null)
+        {
+            if(obj.getCuraRes() > 0)
+            {
+                sumaResistencia(obj.getCuraRes());
+                System.out.println("¡Usas "+ obj.getNombreObj() + " y recuperas resistencia!");
+                usar = true;
+                inventory.remove(obj);
+            }
+            else
+            {
+                System.out.println("Ese objeto no puede usarse");
+            }
+        }
+        else
+        {
+            System.out.println("No tienes ese objeto en el inventario");
+        }
+        return usar;
+    }
+
+    /**
      * Intenta añadir un objeto al inventario del jugador. Si el objeto existe 
      * y puede cogerlo, lo añadira a su inventario. Sino mostrara un mensaje indicando el problema
-     * @param El nombre del objeto que quiere añadir
+     * @param objeto El objeto que quiere añadir
      * @return True si ha podido añadir el objeto, false sino.
      */
     public boolean addItem(Item objeto)
@@ -388,13 +423,19 @@ public class Player
     }
 
     /**
-     * Suma a la resistencia del jugador en la cantidad introducida como parametro
+     * Suma a la resistencia del jugador en la cantidad introducida como parametro.
+     * La resistencia nunca podra ser mayor que la resistencia máxima.
      * @param res La resistencia a añadir a la resistencia del jugador.
      *              Sera negativa si hay que disminuirla, positiva para aumentarla.
      */
     public void sumaResistencia(int res)
     {
         resistencia += res; 
+        // Comprueba que no supere el maximo
+        if(resistencia > maxResistencia)
+        {
+            resistencia = maxResistencia;
+        }
     }
 
     /**

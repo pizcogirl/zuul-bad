@@ -32,7 +32,9 @@ public enum Option {
 
     EQUIPAR("equipar", false),
 
-    SAQUEAR("saquear", false);
+    SAQUEAR("saquear", false),
+    
+    USAR("usar", false);
     private String comando;
     private boolean seguro;
     private Option(String comando, boolean seguro)

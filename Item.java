@@ -18,6 +18,8 @@ public class Item
     private boolean puedeCogerse;
     // Ataque que el objeto proporciona al jugador al equiparlo
     private int ataque;
+    // Resistencia que otorga el objeto al usarse, si vale 0 no es usable
+    private int curaRes;
 
     /**
      * Constructor de items. Crea un objeto item con los parametros dados.
@@ -26,14 +28,16 @@ public class Item
      * @param peso El peso del objeto
      * @paran puedeCogerse Si el objeto puede cogerse o no. Sera true si se puede coger.
      * @param ataque El ataque que proporciona el objeto al jugador al equiparlo.
+     * @param curaRes La resistencia que otorga el objeto al usarse. Si vale 0 no es usable
      */
-    public Item( String nombreObj, String desc, float peso, boolean puedeCogerse, int ataque)
+    public Item( String nombreObj, String desc, float peso, boolean puedeCogerse, int ataque, int curaRes)
     {
         this.nombreObj = nombreObj;
         this.descripcionObj = desc;
         this.peso = peso;
         this.puedeCogerse = puedeCogerse;
         this.ataque = ataque;
+        this.curaRes = curaRes;
     }
 
     /**
@@ -80,6 +84,15 @@ public class Item
     {
         return ataque;
     }
+    
+    /**
+     * Devuelve la cantidad de resistencia que cura el objeto al usarse
+     * @return La cantidad de resistencia que cura el objeto.
+     */
+    public int getCuraRes()
+    {
+        return curaRes;
+    }
 
     /**
      * Devuelve una descripción con toda la información del item.
@@ -87,7 +100,15 @@ public class Item
      */
     public String getLongDescription()
     {
-        String info = descripcionObj + " que pesa " + peso;
+        String info = descripcionObj + "[" + nombreObj + "]" + "(" + peso + "kg) Ataque: " + ataque;
+        if(curaRes > 0)
+        {
+            info += ". Usable";
+        }
+        else
+        {
+            info += ". No usable";
+        }
         return info;
     }
 

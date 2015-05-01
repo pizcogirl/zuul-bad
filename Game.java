@@ -63,17 +63,17 @@ public class Game
         habitacionTesoro.addPNJ(dragon);
 
         // Añade objetos a localizaciones
-        entrada.addItem(new Item("piedra", "una piedra enorme", 50F, false, 50));
-        entrada.addItem(new Item("antorcha", "una antorcha encendida", 0.5F, true, 2));
-        caverna.addItem(new Item("cubo", "un cubo de metal", 1.0F, true, 1));
-        bifurcacion.addItem(new Item("piedra", "una piedra de pequeño tamaño", 10.0F, false, 5));
-        habitacionTesoro.addItem(new Item("monedas", "unas monedas de oro brillantes", 1.0F, true, 0));
-        habitacionTesoro.addItem(new Item("pocion", "una poción que cura 20 de resistencia", 0.5F, true, -1));
-        guarida.addItem(new Item("espada", "una espada afilada", 2.0F, true, 5));
+        entrada.addItem(new Item("piedra", "una piedra enorme", 50F, false, 50, 0));
+        entrada.addItem(new Item("antorcha", "una antorcha encendida", 0.5F, true, 2, 0));
+        caverna.addItem(new Item("cubo", "un cubo de metal", 1.0F, true, 1, 0));
+        bifurcacion.addItem(new Item("piedra", "una piedra de pequeño tamaño", 10.0F, false, 5, 0));
+        habitacionTesoro.addItem(new Item("monedas", "unas monedas de oro brillantes", 1.0F, true, 0, 0));
+        habitacionTesoro.addItem(new Item("pocion", "una poción que cura 20 de resistencia", 0.5F, true, -1, 20));
+        guarida.addItem(new Item("espada", "una espada afilada", 2.0F, true, 5, 0));
 
         // Añade objetos a los PNJs
-        granjero.addItem(new Item("pocion", "una pocion que cura 20 de resistencia", 1.F, true, -1));
-        kobold.addItem(new Item("diamante", "una piedra preciosa muy valiosa", 0.1F, true, 0));
+        granjero.addItem(new Item("pocion", "una pocion que cura 20 de resistencia", 1.F, true, -1, 20));
+        kobold.addItem(new Item("diamante", "una piedra preciosa muy valiosa", 0.1F, true, 0, 0));
 
         // initialise room exits (norte, este, sur, oeste, sureste, noroeste)
         entrada.setExit("este", pasillo);
@@ -183,6 +183,9 @@ public class Game
             break;
             case SAQUEAR:
             ejecutado = player.saquear();
+            break;
+            case USAR:
+            ejecutado = usar(command);
             break;
             case DESCONOCIDO:
             System.out.println("No entiendo las instrucciones");
@@ -341,6 +344,24 @@ public class Game
 
         // Intenta soltar un objeto
         return (player.dropItem(objeto));
+    }
+    
+     /** 
+     * Intenta usar un objeto del inventario.
+     * @return True si logra usarlo, false sino.
+     */
+    private boolean usar(Command command) 
+    {
+        if(!command.hasSecondWord()) {
+            // if there is no second word, we don't know what to use...
+            System.out.println("¿Que quieres usar?");
+            return false;
+        }
+
+        String objeto = command.getSecondWord();
+
+        // Intenta coger el objeto
+        return (player.usar(objeto));
     }
 
     /**

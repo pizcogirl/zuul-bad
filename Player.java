@@ -340,11 +340,32 @@ public class Player
     }
 
     /**
-     * Muestra por pantalla los objetos que lleva en ese momento el jugador.
-     * Si no lleva nada, muestra un mensaje informando de ello. El jugador puede 
-     * examinar su inventario en combate.
+     * Muestra por pantalla el estado del jugador.
+     * El estado se compone de la resistencia del jugador, su ataque,
+     * si lleva algo equipado y su efecto y los objetos en el inventario del jugador.
      */
-    public void showInventory()
+    public void estado()
+    {
+        String estado = "Resistencia: " + resistencia + "/" + maxResistencia;
+        estado += "\nAtaque base: " + ataque + ", ataque total: " + getAtaque();
+        if(equipo != null)
+        {
+            estado += "\nEquipado: " + equipo.getNombreObj() + ", " + equipo.getAtaque() + " añadido al ataque";
+        }
+        else
+        {
+            estado += "\nNo tienes nada equipado";
+        }
+        estado += showInventory();
+        System.out.println(estado);
+    }
+
+    /**
+     * Devuelve la información de los objetos que lleva en ese momento el jugador.
+     * Si no lleva nada, devuelve un mensaje informando de ello. 
+     * @return A string con la información relativa al inventario del jugador
+     */
+    private String showInventory()
     {
         String descr = "";
         // Si existen objetos en el inventario, los muestra
@@ -360,7 +381,7 @@ public class Player
         {
             descr += "\nTu inventario esta vacio";
         }
-        System.out.println(descr);
+        return descr;
     }
 
     /**

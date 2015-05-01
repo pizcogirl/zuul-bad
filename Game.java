@@ -169,8 +169,8 @@ public class Game
             case SOLTAR:
             ejecutado = drop(command);
             break;        
-            case OBJETOS:
-            player.showInventory();
+            case ESTADO:
+            player.estado();
             break;
             case HABLAR:
             ejecutado = player.hablar();
@@ -259,7 +259,7 @@ public class Game
     private void ataquePNJ()
     {
         NPC pnj = player.getPNJ();
-        if(pnj.isAgresivo())
+        if(pnj != null && pnj.isAgresivo())
         {
             System.out.println(pnj.getNombre() + " te golpea y te hace " + pnj.getAtaque() + " puntos de daño");
             player.sumaResistencia(-1 * (pnj.getAtaque()));

@@ -22,7 +22,7 @@ public enum Option {
 
     SOLTAR("soltar", false), 
 
-    OBJETOS("objetos", false), 
+    ESTADO("estado", false), 
 
     DESCONOCIDO("desconocido", true),
 

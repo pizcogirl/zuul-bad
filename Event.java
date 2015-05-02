@@ -53,6 +53,15 @@ public class Event
         // El evento siempre se crea desactivado
         this.activado = false;
     }
+    
+    /**
+     * Devuelve la pista del evento
+     * @return La pista del evento
+     */
+    public String getPista()
+    {
+        return pista;
+    }
 
     /**
      * Activa el efecto del evento
@@ -61,6 +70,7 @@ public class Event
     {
         if(!activado)
         {
+            System.out.println(descripcion);
             activado = true;
             if(pnj != null)
             {

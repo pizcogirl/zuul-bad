@@ -19,23 +19,27 @@ import java.util.ArrayList;
  */
 public class Room 
 {
+    private boolean abierta; // True si la localizacion es accesible, false sino
     private String description;
     private HashMap<String, Room> salidas;
     private ArrayList<Item> objetos;
     private NPC pnj;
+    private ArrayList<Event> eventos;
 
     /**
-     * Create a room described "description". Initially, it has
-     * no exits. "description" is something like "a kitchen" or
-     * "an open court yard".
-     * @param description The room's description.
+     * Crea una localizacion descrita en la descripcion. Se indica si la localizacion
+     * es accesible o no inicialmente. Inicialmente no tiene salidas.
+     * @param abierta Indica si la localizacion esta abierta o no.
+     * @param description La descripcion de la localizacion.
      */
-    public Room(String description) 
+    public Room(boolean abierta, String description) 
     {
+        this.abierta = abierta;
         this.description = description;
         salidas = new HashMap<String, Room>();
         objetos = new ArrayList<Item>();
         pnj = null;
+        eventos = new ArrayList<Event>();
     }
 
     /**
@@ -84,7 +88,7 @@ public class Room
         {
             Map.Entry<String, Room> pair = (Map.Entry)it.next();
             Room habitacion = pair.getValue();
-            if(habitacion != null)
+            if(habitacion != null && habitacion.estaAbierta())
             {
                 descripcion = descripcion + pair.getKey() + " ";
             }
@@ -119,6 +123,16 @@ public class Room
         {
             descr +="\nTe encuentras aqui con: \n" + pnj.description();
         }
+        if(eventos.size() > 0)
+        {
+            for(int i = 0; i < eventos.size(); i++)
+            {
+                if(!eventos.get(i).estaActivado())
+                {
+                    descr += "\n{" + eventos.get(i).getPista() + "}";
+                }
+            }
+        }
         return descr;
     }
 
@@ -130,7 +144,7 @@ public class Room
     {
         objetos.add(objeto);
     }
-    
+
     /**
      * Busca un objeto en la localización. Si existe lo devuelve,
      * sino devuelve null.
@@ -153,7 +167,7 @@ public class Room
         }
         return objeto;
     }
-    
+
     /**
      * Elimina un objeto de la localización
      */
@@ -161,7 +175,7 @@ public class Room
     {
         objetos.remove(objeto);
     }
-    
+
     /**
      * Introduce un PNJ a la localización. Si ya existe uno, o sobreescribe
      * @param pnj El pnj a introducir en esta localización
@@ -170,7 +184,7 @@ public class Room
     {
         this.pnj = pnj;
     }
-    
+
     /**
      * Devuelve el PNJ que se encuentra en esa localización
      * @return el PNJ que se encuentra en la licalización. Si no hay ninguno
@@ -179,6 +193,51 @@ public class Room
     public NPC getPNJ()
     {
         return pnj;
+    }
+
+    /**
+     * Indica si la localizacion es accesible o no.
+     * @return True si es accesible, false sino.
+     */
+    public boolean estaAbierta()
+    {
+        return abierta;
+    }
+
+    /**
+     * Abre la localización, haciendola accesible si estaba cerrada.
+     * Si estaba abierta no cambia nada.
+     */
+    public void abrir()
+    {
+        abierta = true;
+    }
+
+    /**
+     * Cierra la localización, haciendola inaccesible si estaba abierta.
+     * Si estaba cerrada no cambia nada.
+     */
+    public void cerrar()
+    {
+        abierta = false;
+    }
+
+    /**
+     * Añade un evento a la localizacion
+     * @param evento El evento a añadir
+     */
+    public void addEvento(Event evento)
+    {
+        eventos.add(evento);
+    }
+
+    /**
+     * Devuelve la coleccion de eventos que hay en la localizacion.
+     * @return La coleccion de eventos de la localizacion.
+     */
+    public ArrayList<Event> getEventos()
+    {
+        return eventos;
     }
 
 }

@@ -133,7 +133,7 @@ public class Player
         {
             Room nextRoom = currentRoom.getExit(direccion);
 
-            if (nextRoom == null) {
+            if ((nextRoom == null) || !(nextRoom.estaAbierta())) {
                 System.out.println("No puedes continuar por ahí");
             }
             else {
@@ -148,6 +148,27 @@ public class Player
             System.out.println("No puedes hacer eso en combate");
         }
         return desplazarse;
+    }
+
+    /**
+     * Busca en la localizacion a fondo, para localizar objetos o caminos ocultos.
+     * Si encuentra algo, informa de ello.
+     * No puedes buscar en combate.
+     * @return True si ha podido buscar, false sino.
+     */
+    public boolean buscar()
+    {
+        boolean buscar = false;
+        if(!enCombate)
+        {
+            System.out.println("Revisas a fondo la localización");
+            buscar = true;
+        }
+        else
+        {
+            System.out.println("No puedes hacer eso en combate");
+        }
+        return buscar;
     }
 
     /**
@@ -214,7 +235,7 @@ public class Player
     {
         boolean saqueado = false;
         // Toma el inventario del PNJ
-        ArrayList<Item> loot = getPNJ().saquear();
+        ArrayList<Item> loot = currentRoom.getPNJ().saquear();
         // Intenta añadir cada objeto al inventario del PNJ
         if(loot.size() > 0)
         {
@@ -423,8 +444,8 @@ public class Player
      */
     public void atacar()
     {
-        System.out.println("\nGolpeas a " + getPNJ().getNombre() + " y le haces " + getAtaque() + " puntos de daño");
-        getPNJ().restaRes(getAtaque());
+        System.out.println("\nGolpeas a " + currentRoom.getPNJ().getNombre() + " y le haces " + getAtaque() + " puntos de daño");
+        currentRoom.getPNJ().restaRes(getAtaque());
     }
 
     /**
@@ -460,13 +481,12 @@ public class Player
     }
 
     /**
-     * Devuelve el PNJ que se encuentre en ese momento en la localización con el jugador
-     * @return El PNJ que se encuentre en ese momento en la localización con el jugador,
-     *          o null si no hay ninguno.
+     * Devuelve la localizacion en la que se encuentra el jugador
+     * @return Donde se encuentra el jugador
      */
-    public NPC getPNJ()
+    public Room localizar()
     {
-        return currentRoom.getPNJ();
+        return currentRoom;
     }
 
     /**

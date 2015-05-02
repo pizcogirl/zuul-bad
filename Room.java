@@ -22,6 +22,7 @@ public class Room
     private String description;
     private HashMap<String, Room> salidas;
     private ArrayList<Item> objetos;
+    private NPC pnj;
 
     /**
      * Create a room described "description". Initially, it has
@@ -34,6 +35,7 @@ public class Room
         this.description = description;
         salidas = new HashMap<String, Room>();
         objetos = new ArrayList<Item>();
+        pnj = null;
     }
 
     /**
@@ -113,6 +115,10 @@ public class Room
         {
             descr += "\nNo ves nada aqui";
         }
+        if(pnj != null)
+        {
+            descr +="\nTe encuentras aqui con: \n" + pnj.description();
+        }
         return descr;
     }
 
@@ -154,6 +160,25 @@ public class Room
     public void remove(Item objeto)
     {
         objetos.remove(objeto);
+    }
+    
+    /**
+     * Introduce un PNJ a la localización. Si ya existe uno, o sobreescribe
+     * @param pnj El pnj a introducir en esta localización
+     */
+    public void addPNJ(NPC pnj)
+    {
+        this.pnj = pnj;
+    }
+    
+    /**
+     * Devuelve el PNJ que se encuentra en esa localización
+     * @return el PNJ que se encuentra en la licalización. Si no hay ninguno
+     *          devolvera null.
+     */
+    public NPC getPNJ()
+    {
+        return pnj;
     }
 
 }

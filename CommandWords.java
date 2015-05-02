@@ -39,7 +39,7 @@ public class CommandWords
         int index = 0;
         while(index < commands.size() && !esComando)
         {
-            if(commands.get(index).getCommand().equals(aString))
+            if(commands.get(index).getComando().equals(aString))
             {
                 esComando = true;
             }
@@ -56,7 +56,7 @@ public class CommandWords
         String validCommands = "Los comandos son: \n";
         for(Option command : commands)
         {
-            validCommands += command.getCommand() + " ";
+            validCommands += command.getComando() + " ";
         }
         System.out.println(validCommands);
     }
@@ -74,7 +74,7 @@ public class CommandWords
         int index = 0;
         while(index < commands.size() && !encontrado)
         {
-            if(commands.get(index).getCommand().equals(commandWord))
+            if(commands.get(index).getComando().equals(commandWord))
             {
                 opcion = commands.get(index);
                 encontrado = true;

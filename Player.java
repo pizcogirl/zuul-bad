@@ -133,7 +133,7 @@ public class Player
         {
             Room nextRoom = currentRoom.getExit(direccion);
 
-            if (nextRoom == null) {
+            if ((nextRoom == null) || !(nextRoom.estaAbierta())) {
                 System.out.println("No puedes continuar por ahí");
             }
             else {

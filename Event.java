@@ -12,6 +12,8 @@
  */
 public class Event
 {
+    // Indica el comando necesario para activa el evento
+    private Option opcion;
     // Pista que se incluye en la descripcion de la zona mientras el evento no este activado
     private String pista;
     // Texto que se muestra al activar el evento
@@ -27,13 +29,14 @@ public class Event
 
     /**
      * Constructor de la clase eventos.
+     * @param opcion El comando que activa este evento.
      * @param pista Pista que se incluye en la descripcion de la zona mientras el evento no este activado
      * @param descripcion Descripcion del evento
      * @param pnj Si el evento implica la aparición de un PNJ, el PNJ, sino null
      * @param objeto Si el evento implica la aparicion de un objeto, el objeto, sino null
      * @param localizacion Si el evento implica la aparicion de una localizacion, la localizacion, sino null
      */
-    public Event(String pista, String descripcion, NPC pnj, Item objeto, Room localizacion)
+    public Event(Option opcion, String pista, String descripcion, NPC pnj, Item objeto, Room localizacion)
     {
         // initialise instance variables
         this.pista = pista;

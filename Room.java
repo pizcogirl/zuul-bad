@@ -19,19 +19,21 @@ import java.util.ArrayList;
  */
 public class Room 
 {
+    private boolean abierta; // True si la localizacion es accesible, false sino
     private String description;
     private HashMap<String, Room> salidas;
     private ArrayList<Item> objetos;
     private NPC pnj;
 
     /**
-     * Create a room described "description". Initially, it has
-     * no exits. "description" is something like "a kitchen" or
-     * "an open court yard".
-     * @param description The room's description.
+     * Crea una localizacion descrita en la descripcion. Se indica si la localizacion
+     * es accesible o no inicialmente. Inicialmente no tiene salidas.
+     * @param abierta Indica si la localizacion esta abierta o no.
+     * @param description La descripcion de la localizacion.
      */
-    public Room(String description) 
+    public Room(boolean abierta, String description) 
     {
+        this.abierta = abierta;
         this.description = description;
         salidas = new HashMap<String, Room>();
         objetos = new ArrayList<Item>();
@@ -84,7 +86,7 @@ public class Room
         {
             Map.Entry<String, Room> pair = (Map.Entry)it.next();
             Room habitacion = pair.getValue();
-            if(habitacion != null)
+            if(habitacion != null && habitacion.estaAbierta())
             {
                 descripcion = descripcion + pair.getKey() + " ";
             }
@@ -179,6 +181,15 @@ public class Room
     public NPC getPNJ()
     {
         return pnj;
+    }
+    
+    /**
+     * Indica si la localizacion es accesible o no.
+     * @return True si es accesible, false sino.
+     */
+    public boolean estaAbierta()
+    {
+        return abierta;
     }
 
 }

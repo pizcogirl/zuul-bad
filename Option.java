@@ -34,8 +34,11 @@ public enum Option {
 
     SAQUEAR("saquear", false),
     
-    USAR("usar", false);
+    USAR("usar", false),
+    
+    BUSCAR("buscar", false);
     private String comando;
+    // Indica si es seguro usarlo delante de un PNJ agresivo, o desencadenada un combate
     private boolean seguro;
     private Option(String comando, boolean seguro)
     {this.comando = comando;

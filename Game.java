@@ -1,4 +1,5 @@
 import java.util.Random;
+import java.util.ArrayList;
 
 /**
  *  This class is the main class of the "World of Zuul" application. 
@@ -40,7 +41,8 @@ public class Game
     private void createRooms()
     {
         Room entrada, pasillo, caverna, bifurcacion, habitacionTesoro, guarida, camaraOculta, salidaObstruida, campo;
-        NPC granjero, kobold, dragon;
+        NPC granjero, kobold, dragon, kobold2;
+        Event evento1, evento2, evento3, evento4, evento5;
 
         // create the rooms
         entrada = new Room(true, "la entrada de una mazmorra");
@@ -50,18 +52,36 @@ public class Game
         habitacionTesoro = new Room(true, "una habitacion del tesoro");
         guarida = new Room(true, "la guarida del monstruo");
         camaraOculta = new Room (true, "en una sala pequeña, a la que entras por un pequeño boquete");
-        salidaObstruida = new Room (true, "un pasillo que termina en una salida de la mazmorra, obstruida por un derrumbamiento");
+        salidaObstruida = new Room (true, "un pasillo que termina en una salida de la mazmorra, tapada con tablones");
         campo = new Room (false, "Un campo abierto donde de asientan unas casitas");
 
         // Crea los PNJs
         granjero = new NPC(false, "granjero", "suerte, yo me quedo aqui", "Un granjero asustado de los alrededores", 1, 30);
-        kobold = new NPC(true, "kobold", null, "Un kobold pequeño, armado con un palo", 5, 20);
+        kobold = new NPC(true, "kobold", null, "Un kobold pequeño, armado con un palo", 2, 20);
         dragon = new NPC(true, "dragon", null, "Un dragon de aspecto fiero", 20, 200);
+        kobold2 = new NPC(true, "kobold", null, "Un kobold muy enfadado", 4, 20);
+
+        // Crea los eventos
+        evento1 = new Event(caverna, Option.BUSCAR, null, "Crees ver algo en una esquina", "Apartas unas rocas y encuentras un tesoro", null, 
+            (new Item("pocion", "una poción que cura 15 de resistencia", 0.5F, true, -1, 15)), null);
+        evento2 = new Event(salidaObstruida, Option.ATACAR, null, "Con unos golpes podrias abrirte paso", "Logras abrir un camino", null,
+            null, campo);
+        evento3 = new Event(habitacionTesoro, Option.COGER, "monedas", "!oro!","Al coger el tesoro, aparece su dueño", kobold2, null, null);
+        evento4 = new Event(bifurcacion, Option.BUSCAR, null, "notas algo extraño en la pared del fondo", "Encuentras una palanca escondida, y oyes un ruido lejano al activarla",
+                            null, (new Item("maza", "una pesada maza de metal", 3.5F, true, 6, 0)), null);
+        evento5 = new Event(guarida, Option.BUSCAR, null, "ves varios cajones esparcidos por la habitacion", "En uno de los cajones hay algo", null, 
+                            (new Item("espada", "una espada afilada", 2.0F, true, 5, 0)), null);
+
+        // Añade los eventos a las localizaciones
+        caverna.addEvento(evento1);
+        salidaObstruida.addEvento(evento2);
+        habitacionTesoro.addEvento(evento3);
+        habitacionTesoro.addEvento(evento4);
+        guarida.addEvento(evento5);
 
         // Añade los PNJ a las localizaciones
         entrada.addPNJ(granjero);
         guarida.addPNJ(kobold);
-        habitacionTesoro.addPNJ(dragon);
 
         // Añade objetos a localizaciones
         entrada.addItem(new Item("piedra", "una piedra enorme", 50F, false, 50, 0));
@@ -70,7 +90,7 @@ public class Game
         bifurcacion.addItem(new Item("piedra", "una piedra de pequeño tamaño", 10.0F, false, 5, 0));
         habitacionTesoro.addItem(new Item("monedas", "unas monedas de oro", 1.0F, true, 0, 0));
         habitacionTesoro.addItem(new Item("pocion", "una poción que cura 20 de resistencia", 0.5F, true, -1, 20));
-        guarida.addItem(new Item("espada", "una espada afilada", 2.0F, true, 5, 0));
+        guarida.addItem(new Item("monedas", "unas monedas de plata", 2.0F, true, 0, 0));
 
         // Añade objetos a los PNJs
         granjero.addItem(new Item("pocion", "una pocion que cura 20 de resistencia", 1.F, true, -1, 20));
@@ -191,17 +211,58 @@ public class Game
             break;
             case USAR:
             ejecutado = usar(command);
+            case BUSCAR:
+            ejecutado = player.buscar();
             break;
             case DESCONOCIDO:
             System.out.println("No entiendo las instrucciones");
         }
-        if(!(commandWord.esSeguro()) && (ejecutado))
+        // Comprueba si se ha activado algun evento, en caso de llevarse a cabo el comando
+        if(ejecutado)
+        {   
+            compruebaEvento(command);
+            // Comprueba si se inicia un combate, y si esta ya en combate el PNJ ataca
+            if(!commandWord.esSeguro())
+            {
+                emboscada();
+                ataquePNJ();
+            }
+        }
+        return wantToQuit;
+    }
+
+    /**
+     * Comprueba si el comando usado activa alguno de los eventos de la localizacion,
+     * si hubiera.
+     * @param comando El comando a comprobar.
+     */
+    public void compruebaEvento(Command comando)
+    {
+        // Toma los eventos de la localizacion actual
+        ArrayList<Event> eventos = new ArrayList<Event>(player.localizar().getEventos());
+        Option commandWord = comando.getCommandWord();
+        // Comprueba cada evento para ver si se ha activado alguno
+        for(Event evento: eventos)
         {
-            emboscada();
-            ataquePNJ();
+            // Si el comando es el que afecta al evento
+            if(evento.getOpcion() == commandWord)
+            {
+                // Si el evento requiere informacion adicional para activarse
+                if(evento.getInfoAdicional() != null)
+                {
+                    // Si el jugador ha introducido alguna informacion extra, y si esta coincide con la que necesita el evento
+                    if((comando.getSecondWord() != null) && (comando.getSecondWord().equals(evento.getInfoAdicional())))
+                    {
+                        evento.activar();
+                    }
+                }
+                else
+                {
+                    evento.activar();
+                }
+            }
         }
 
-        return wantToQuit;
     }
 
     /**
@@ -350,8 +411,8 @@ public class Game
         // Intenta soltar un objeto
         return (player.dropItem(objeto));
     }
-    
-     /** 
+
+    /** 
      * Intenta usar un objeto del inventario.
      * @return True si logra usarlo, false sino.
      */

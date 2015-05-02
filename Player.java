@@ -151,6 +151,27 @@ public class Player
     }
 
     /**
+     * Busca en la localizacion a fondo, para localizar objetos o caminos ocultos.
+     * Si encuentra algo, informa de ello.
+     * No puedes buscar en combate.
+     * @return True si ha podido buscar, false sino.
+     */
+    public boolean buscar()
+    {
+        boolean buscar = false;
+        if(!enCombate)
+        {
+            System.out.println("Revisas a fondo la localización");
+            buscar = true;
+        }
+        else
+        {
+            System.out.println("No puedes hacer eso en combate");
+        }
+        return buscar;
+    }
+
+    /**
      * El jugador busca un objeto en la localización. Si lo encuentra lo intenta añadir al inventario.
      * Si lo añade al inventario, desaparece de la localización. Si esta en combate no puede coger objetos del suelo.
      * @param El nombre del objeto a buscar e intentar añadir al inventario.

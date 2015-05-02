@@ -123,6 +123,16 @@ public class Room
         {
             descr +="\nTe encuentras aqui con: \n" + pnj.description();
         }
+        if(eventos.size() > 0)
+        {
+            for(int i = 0; i < eventos.size(); i++)
+            {
+                if(!eventos.get(i).estaActivado())
+                {
+                    descr += "\n{" + eventos.get(i).getPista() + "}";
+                }
+            }
+        }
         return descr;
     }
 
@@ -220,21 +230,14 @@ public class Room
     {
         eventos.add(evento);
     }
-    
+
     /**
      * Devuelve la coleccion de eventos que hay en la localizacion.
-     * @return La coleccion de eventos de la localizacion. Si no hay eventos, devuelve null.
+     * @return La coleccion de eventos de la localizacion.
      */
     public ArrayList<Event> getEventos()
     {
-        if(eventos.size() > 0)
-        {
-            return eventos;
-        }
-        else
-        {
-            return null;
-        }
+        return eventos;
     }
-    
+
 }

@@ -16,6 +16,8 @@ public class Event
     private Room localizacionAfectada;
     // Indica el comando necesario para activa el evento
     private Option opcion;
+    // Informacion adicional necesaria para activar el evento, por ejemplo el objeto necesario
+    private String infoAdicional;
     // Pista que se incluye en la descripcion de la zona mientras el evento no este activado
     private String pista;
     // Texto que se muestra al activar el evento
@@ -34,17 +36,19 @@ public class Event
      * @param locAfectada La localizacion sobre la que tiene efecto el evento. No tiene porque coincidir con la localizacion 
      *          donde se encuentra el evento.
      * @param opcion El comando que activa este evento.
+     * @param infoAdicional Información adicional necesaria para activar el evento, como el objeto que debe soltarse
      * @param pista Pista que se incluye en la descripcion de la zona mientras el evento no este activado
      * @param descripcion Descripcion del evento
      * @param pnj Si el evento implica la aparición de un PNJ, el PNJ, sino null
      * @param objeto Si el evento implica la aparicion de un objeto, el objeto, sino null
      * @param localizacion Si el evento implica la aparicion de una localizacion, la localizacion, sino null
      */
-    public Event(Room locAfectada, Option opcion, String pista, String descripcion, NPC pnj, Item objeto, Room localizacion)
+    public Event(Room locAfectada, Option opcion, String infoAdicional, String pista, String descripcion, NPC pnj, Item objeto, Room localizacion)
     {
         // initialise instance variables
         this.localizacionAfectada = locAfectada;
         this.opcion = opcion;
+        this.infoAdicional = infoAdicional;
         this.pista = pista;
         this.descripcion = descripcion;
         this.pnj = pnj;
@@ -61,6 +65,33 @@ public class Event
     public String getPista()
     {
         return pista;
+    }
+    
+    /**
+     * Devuelve la opcion que activa el evento
+     * @return la opcion que activa el evento
+     */
+    public Option getOpcion()
+    {
+        return opcion;
+    }
+    
+    /**
+     * Devuelve la información adicional para activar el evento
+     * @return La información adicional para activar el evento
+     */
+    public String getInfoAdicional()
+    {
+        return infoAdicional;
+    }
+    
+    /**
+     * Devuelve si el evento ha sido ha activado
+     * @return true si ya ha sido activado, false sino.
+     */
+    public boolean estaActivado()
+    {
+        return activado;
     }
 
     /**
@@ -108,6 +139,6 @@ public class Event
      */
     private void activaLocalizacion()
     {
-        localizacionAfectada.abrir();
+        localizacion.abrir();
     }
 }

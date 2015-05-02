@@ -216,7 +216,7 @@ public class Player
         // Toma el inventario del PNJ
         ArrayList<Item> loot = getPNJ().saquear();
         // Intenta añadir cada objeto al inventario del PNJ
-        if(loot != null)
+        if(loot.size() > 0)
         {
             Iterator<Item> it = loot.iterator();
             while(it.hasNext())

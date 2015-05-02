@@ -39,18 +39,19 @@ public class Game
      */
     private void createRooms()
     {
-        Room entrada, pasillo, caverna, bifurcacion, habitacionTesoro, guarida, camaraOculta, salidaObstruida;
+        Room entrada, pasillo, caverna, bifurcacion, habitacionTesoro, guarida, camaraOculta, salidaObstruida, campo;
         NPC granjero, kobold, dragon;
 
         // create the rooms
-        entrada = new Room("la entrada de una mazmorra");
-        pasillo = new Room("un pasillo de la mazmorra");
-        caverna = new Room("una caverna rocosa");
-        bifurcacion = new Room("el camino se divide en dos");
-        habitacionTesoro = new Room("una habitacion del tesoro");
-        guarida = new Room("la guarida del monstruo");
-        camaraOculta = new Room ("en una sala pequeña, a la que entras por un pequeño boquete");
-        salidaObstruida = new Room ("un pasillo que termina en una salida de la mazmorra, obstruida por un derrumbamiento");
+        entrada = new Room(true, "la entrada de una mazmorra");
+        pasillo = new Room(true, "un pasillo de la mazmorra");
+        caverna = new Room(true, "una caverna rocosa");
+        bifurcacion = new Room(true, "el camino se divide en dos");
+        habitacionTesoro = new Room(true, "una habitacion del tesoro");
+        guarida = new Room(true, "la guarida del monstruo");
+        camaraOculta = new Room (true, "en una sala pequeña, a la que entras por un pequeño boquete");
+        salidaObstruida = new Room (true, "un pasillo que termina en una salida de la mazmorra, obstruida por un derrumbamiento");
+        campo = new Room (false, "Un campo abierto donde de asientan unas casitas");
 
         // Crea los PNJs
         granjero = new NPC(false, "granjero", "suerte, yo me quedo aqui", "Un granjero asustado de los alrededores", 1, 30);
@@ -92,6 +93,8 @@ public class Game
         camaraOculta.setExit("suroeste", salidaObstruida);
         camaraOculta.setExit("noroeste", caverna);
         salidaObstruida.setExit("noroeste", camaraOculta);
+        salidaObstruida.setExit("sur", campo);
+        campo.setExit("norte", salidaObstruida);
 
         player.setRoom(entrada);  // start game outside
     }
@@ -209,7 +212,7 @@ public class Game
     private boolean atacar()
     {
         boolean atacado = false;
-        NPC pnj = player.getPNJ();
+        NPC pnj = player.localizar().getPNJ();
         if((pnj != null) && (pnj.isAgresivo()) && (pnj.getResistencia() > 0))
         {
             // El jugador entra en combate
@@ -246,7 +249,7 @@ public class Game
      */
     private void emboscada()
     {
-        NPC pnj = player.getPNJ();
+        NPC pnj = player.localizar().getPNJ();
         if ((pnj != null) && (pnj.isAgresivo()) && !(player.enCombate()))
         {
             System.out.println("\n¡" + pnj.getNombre() + " te descubre y se lanza al combate!");
@@ -260,7 +263,7 @@ public class Game
      */
     private void ataquePNJ()
     {
-        NPC pnj = player.getPNJ();
+        NPC pnj = player.localizar().getPNJ();
         if(pnj != null && pnj.isAgresivo())
         {
             System.out.println(pnj.getNombre() + " te golpea y te hace " + pnj.getAtaque() + " puntos de daño");

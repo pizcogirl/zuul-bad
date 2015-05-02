@@ -191,5 +191,23 @@ public class Room
     {
         return abierta;
     }
+    
+    /**
+     * Abre la localización, haciendola accesible si estaba cerrada.
+     * Si estaba abierta no cambia nada.
+     */
+    public void abrir()
+    {
+        abierta = true;
+    }
+    
+        /**
+     * Cierra la localización, haciendola inaccesible si estaba abierta.
+     * Si estaba cerrada no cambia nada.
+     */
+    public void cerrar()
+    {
+        abierta = false;
+    }
 
 }

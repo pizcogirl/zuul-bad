@@ -12,6 +12,8 @@
  */
 public class Event
 {
+    // Donde tiene efecto el evento. No tiene porque ser en la localizacion donde se encuentra
+    private Room localizacionAfectada;
     // Indica el comando necesario para activa el evento
     private Option opcion;
     // Pista que se incluye en la descripcion de la zona mientras el evento no este activado
@@ -29,6 +31,8 @@ public class Event
 
     /**
      * Constructor de la clase eventos.
+     * @param locAfectada La localizacion sobre la que tiene efecto el evento. No tiene porque coincidir con la localizacion 
+     *          donde se encuentra el evento.
      * @param opcion El comando que activa este evento.
      * @param pista Pista que se incluye en la descripcion de la zona mientras el evento no este activado
      * @param descripcion Descripcion del evento
@@ -36,9 +40,11 @@ public class Event
      * @param objeto Si el evento implica la aparicion de un objeto, el objeto, sino null
      * @param localizacion Si el evento implica la aparicion de una localizacion, la localizacion, sino null
      */
-    public Event(Option opcion, String pista, String descripcion, NPC pnj, Item objeto, Room localizacion)
+    public Event(Room locAfectada, Option opcion, String pista, String descripcion, NPC pnj, Item objeto, Room localizacion)
     {
         // initialise instance variables
+        this.localizacionAfectada = locAfectada;
+        this.opcion = opcion;
         this.pista = pista;
         this.descripcion = descripcion;
         this.pnj = pnj;
@@ -49,32 +55,49 @@ public class Event
     }
 
     /**
-     * El evento añade un nuevo pnj si es la primera vez que se cumple la condicion del evento
-     * @return el nuevo PNJ.
+     * Activa el efecto del evento
      */
-    public NPC activaPNJ()
+    public void activar()
     {
-        NPC nuevo = null;
         if(!activado)
         {
             activado = true;
-            nuevo = pnj;
+            if(pnj != null)
+            {
+                activaPNJ();
+            }
+            else if(objeto != null)
+            {
+                activaObjeto();
+            }
+            else if (localizacion != null)
+            {
+                activaLocalizacion();
+            }
         }
-        return nuevo;
     }
 
     /**
-     * El evento añade un nuevo objeto si es la primera vez que se cumple la condicion del evento
-     * @return el nuevo objeto.
+     * El evento añade un nuevo pnj.
      */
-    public Item activaObjeto()
+    private void activaPNJ()
     {
-        Item nuevo = null;
-        if(!activado)
-        {
-            activado = true;
-            nuevo = objeto;
-        }
-        return nuevo;
+        localizacionAfectada.addPNJ(pnj);
+    }
+
+    /**
+     * El evento añade un nuevo objeto.
+     */
+    private void activaObjeto()
+    {
+        localizacionAfectada.addItem(objeto);
+    }
+
+    /**
+     * El evento abre el acceso a una localizacion.
+     */
+    private void activaLocalizacion()
+    {
+        localizacionAfectada.abrir();
     }
 }

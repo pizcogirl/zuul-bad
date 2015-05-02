@@ -214,7 +214,7 @@ public class Player
     {
         boolean saqueado = false;
         // Toma el inventario del PNJ
-        ArrayList<Item> loot = getPNJ().saquear();
+        ArrayList<Item> loot = currentRoom.getPNJ().saquear();
         // Intenta añadir cada objeto al inventario del PNJ
         if(loot.size() > 0)
         {
@@ -423,8 +423,8 @@ public class Player
      */
     public void atacar()
     {
-        System.out.println("\nGolpeas a " + getPNJ().getNombre() + " y le haces " + getAtaque() + " puntos de daño");
-        getPNJ().restaRes(getAtaque());
+        System.out.println("\nGolpeas a " + currentRoom.getPNJ().getNombre() + " y le haces " + getAtaque() + " puntos de daño");
+        currentRoom.getPNJ().restaRes(getAtaque());
     }
 
     /**
@@ -460,13 +460,12 @@ public class Player
     }
 
     /**
-     * Devuelve el PNJ que se encuentre en ese momento en la localización con el jugador
-     * @return El PNJ que se encuentre en ese momento en la localización con el jugador,
-     *          o null si no hay ninguno.
+     * Devuelve la localizacion en la que se encuentra el jugador
+     * @return Donde se encuentra el jugador
      */
-    public NPC getPNJ()
+    public Room localizar()
     {
-        return currentRoom.getPNJ();
+        return currentRoom;
     }
 
     /**

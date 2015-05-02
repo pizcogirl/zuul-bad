@@ -5,7 +5,7 @@ import java.util.ArrayList;
  * Esta clase representa al jugador del juego. Realiza las acciones
  * relacionadas con el (examinar, comer, etc).
  * 
- * @author (your name) 
+ * @author Julia Zuara
  * @version (a version number or a date)
  */
 public class Player

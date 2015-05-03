@@ -65,4 +65,13 @@ public class Parser
     {
         commands.showAll();
     }
+    
+    /**
+     * Metodo que imprime la descripcion del comando introducido por parametro
+     * @param El comando del que se quiere obtener la descripción
+     */
+    public void printCommand(String comando)
+    {
+        commands.show(comando);
+    }
 }

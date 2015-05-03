@@ -68,9 +68,9 @@ public class Game
             null, campo);
         evento3 = new Event(habitacionTesoro, Option.COGER, "monedas", "!oro!","Al coger el tesoro, aparece su dueño", kobold2, null, null);
         evento4 = new Event(bifurcacion, Option.BUSCAR, null, "notas algo extraño en la pared del fondo", "Encuentras una palanca escondida, y oyes un ruido lejano al activarla",
-                            null, (new Item("maza", "una pesada maza de metal", 3.5F, true, 6, 0)), null);
+            null, (new Item("maza", "una pesada maza de metal", 3.5F, true, 6, 0)), null);
         evento5 = new Event(guarida, Option.BUSCAR, null, "ves varios cajones esparcidos por la habitacion", "En uno de los cajones hay algo", null, 
-                            (new Item("espada", "una espada afilada", 2.0F, true, 5, 0)), null);
+            (new Item("espada", "una espada afilada", 2.0F, true, 5, 0)), null);
 
         // Añade los eventos a las localizaciones
         caverna.addEvento(evento1);
@@ -171,7 +171,7 @@ public class Game
 
         switch(commandWord){
             case AYUDA:
-            printHelp();
+            printHelp(command);
             break;
             case IR:
             ejecutado = goRoom(command);
@@ -333,11 +333,19 @@ public class Game
     }
 
     /**
-     * Muestra la ayuda del juego.
+     * Muestra la ayuda del juego. Puede ser general o especifica si se ha precisado un comando
      */
-    private void printHelp() 
+    private void printHelp(Command command) 
     {
-        parser.printValidCommands();
+        if(!command.hasSecondWord())
+        {
+            parser.printValidCommands();
+        }
+        else
+        {
+            String comando = command.getSecondWord();
+            parser.printCommand(comando);
+        }
     }
 
     /** 

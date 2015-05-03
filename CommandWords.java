@@ -54,11 +54,37 @@ public class CommandWords
     public void showAll()
     {
         String validCommands = "Los comandos son: \n";
+        int contador = 0;
         for(Option command : commands)
         {
             validCommands += command.getComando() + " ";
+            // Mete un salto de linea cada 6 comandos.
+            if(contador == 5)
+            {
+                validCommands += "\n";
+                contador = 0;
+            }
+            contador++;
         }
+        validCommands += "\nPara obtener ayuda sobre un comando especifico, escriba " +  Option.AYUDA.getComando() + " más el comando";
         System.out.println(validCommands);
+    }
+    
+    /**
+     * Imprime la ayuda de un comando especifico
+     * @param el comando sobre el que se necesita ayuda
+     */
+    public void show(String comando)
+    {
+        String infoComando = "Ese comando no es valido, no se puede mostrar ayuda";
+        for(Option command : commands)
+        {
+            if(command.getComando().equals(comando))
+            {
+                infoComando = command.getInfo();
+            }
+        }
+        System.out.println(infoComando);
     }
 
     /**

@@ -40,9 +40,9 @@ public class Game
      */
     private void createRooms()
     {
-        Room entrada, pasillo, caverna, bifurcacion, habitacionTesoro, guarida, camaraOculta, salidaObstruida, campo;
-        NPC granjero, kobold, dragon, kobold2;
-        Event evento1, evento2, evento3, evento4, evento5;
+        Room entrada, pasillo, caverna, bifurcacion, habitacionTesoro, guarida, camaraOculta, salidaObstruida, campo, casaPequenia, casaGrande1, casaGrande2;
+        NPC granjero, kobold, dragon, kobold2, aldeana, aldeano, arania;
+        Event evento1, evento2, evento3, evento4, evento5, evento6;
 
         // create the rooms
         entrada = new Room(true, "la entrada de una mazmorra");
@@ -54,23 +54,32 @@ public class Game
         camaraOculta = new Room (true, "en una sala pequeña, a la que entras por un pequeño boquete");
         salidaObstruida = new Room (true, "un pasillo que termina en una salida de la mazmorra, tapada con tablones");
         campo = new Room (false, "Un campo abierto donde de asientan unas casitas");
+        casaPequenia = new Room(false, "Una pequeña casa de una habitación");
+        casaGrande1 = new Room(true, "La planta baja de la casa parece abandonada hace mucho tiempo");
+        casaGrande2 = new Room (true, "Decadas de polvo se amontonan en esta planta");
 
         // Crea los PNJs
         granjero = new NPC(false, "granjero", "suerte, yo me quedo aqui", "Un granjero asustado de los alrededores", 1, 30);
         kobold = new NPC(true, "kobold", null, "Un kobold pequeño, armado con un palo", 2, 20);
         dragon = new NPC(true, "dragon", null, "Un dragon de aspecto fiero", 20, 200);
         kobold2 = new NPC(true, "kobold", null, "Un kobold muy enfadado", 4, 20);
+        aldeana = new NPC(false, "aldeana", "pasa por favor, mi marido quiere hablar contigo", "Una mujer sentada a la puerta de una pequeña casa", 0, 10);
+        aldeano = new NPC(false, "aldeano", "gracias por encargarte de ese kobold, si buscas mas aventuras, deberias ir al este, alli hay problemas", 
+                        "Un hombre de aspecto vulgar sentado frente al fuego", 3, 10);
+        arania = new NPC(true, "araña", null, "Una araña gigante", 3, 22);
 
         // Crea los eventos
         evento1 = new Event(caverna, Option.BUSCAR, null, "Crees ver algo en una esquina", "Apartas unas rocas y encuentras un tesoro", null, 
             (new Item("pocion", "una poción que cura 15 de resistencia", 0.5F, true, -1, 15)), null);
-        evento2 = new Event(salidaObstruida, Option.ATACAR, null, "Con unos golpes podrias abrirte paso", "Logras abrir un camino", null,
+        evento2 = new Event(salidaObstruida, Option.EQUIPAR, "espada", "Si equiparas una espada podrias abrirte paso", "Logras abrir un camino", null,
             null, campo);
         evento3 = new Event(habitacionTesoro, Option.COGER, "monedas", "!oro!","Al coger el tesoro, aparece su dueño", kobold2, null, null);
         evento4 = new Event(bifurcacion, Option.BUSCAR, null, "notas algo extraño en la pared del fondo", "Encuentras una palanca escondida, y oyes un ruido lejano al activarla",
             null, (new Item("maza", "una pesada maza de metal", 3.5F, true, 6, 0)), null);
         evento5 = new Event(guarida, Option.BUSCAR, null, "ves varios cajones esparcidos por la habitacion", "En uno de los cajones hay algo", null, 
             (new Item("espada", "una espada afilada", 2.0F, true, 5, 0)), null);
+            evento6 = new Event(campo, Option.HABLAR, null, "una mujer sentada frente a una casa te hace señas para que te acerques", "la mujer abre la puerta y te invita a pasar", 
+                                null,null, casaPequenia);
 
         // Añade los eventos a las localizaciones
         caverna.addEvento(evento1);
@@ -78,10 +87,15 @@ public class Game
         habitacionTesoro.addEvento(evento3);
         habitacionTesoro.addEvento(evento4);
         guarida.addEvento(evento5);
+        campo.addEvento(evento6);
+        
 
         // Añade los PNJ a las localizaciones
         entrada.addPNJ(granjero);
         guarida.addPNJ(kobold);
+        campo.addPNJ(aldeana);
+        casaPequenia.addPNJ(aldeano);
+        casaGrande2.addPNJ(arania);
 
         // Añade objetos a localizaciones
         entrada.addItem(new Item("piedra", "una piedra enorme", 50F, false, 50, 0));
@@ -89,11 +103,11 @@ public class Game
         caverna.addItem(new Item("cubo", "un cubo de metal", 1.0F, true, 1, 0));
         bifurcacion.addItem(new Item("piedra", "una piedra de pequeño tamaño", 10.0F, false, 5, 0));
         habitacionTesoro.addItem(new Item("monedas", "unas monedas de oro", 1.0F, true, 0, 0));
-        habitacionTesoro.addItem(new Item("pocion", "una poción que cura 20 de resistencia", 0.5F, true, -1, 20));
         guarida.addItem(new Item("monedas", "unas monedas de plata", 2.0F, true, 0, 0));
+        casaGrande2.addItem(new Item("pocion", "una poción que cura 20 de resistencia", 0.5F, true, -1, 20));
 
         // Añade objetos a los PNJs
-        granjero.addItem(new Item("pocion", "una pocion que cura 20 de resistencia", 1.F, true, -1, 20));
+        aldeano.addItem(new Item("pocion", "una pocion que cura 20 de resistencia", 1.F, true, -1, 20));
         granjero.addItem(new Item("espada", "una espada afilada", 2.0F, true, 5, 0));
         kobold.addItem(new Item("diamante", "una piedra preciosa muy valiosa", 0.1F, true, 0, 0));
         kobold.addItem(new Item("monedas", "unas monedas de oro", 1.0F, true, 0, 0));
@@ -115,6 +129,12 @@ public class Game
         salidaObstruida.setExit("noroeste", camaraOculta);
         salidaObstruida.setExit("sur", campo);
         campo.setExit("norte", salidaObstruida);
+        campo.setExit("oeste", casaPequenia);
+        campo.setExit("sureste", casaGrande1);
+        casaPequenia.setExit("este", campo);
+        casaGrande1.setExit("noroeste", campo);
+        casaGrande1.setExit("arriba", casaGrande2);
+        casaGrande2.setExit("abajo", casaGrande1);
 
         player.setRoom(entrada);  // start game outside
     }

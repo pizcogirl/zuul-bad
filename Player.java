@@ -213,11 +213,18 @@ public class Player
     {
         boolean equipar = false;
         Item objeto = search(nombre);
-        if ((objeto != null) && (objeto instanceof Arma))
+        if ((objeto != null))
         {
-            equipo = (Arma) objeto;
-            System.out.println("\nEquipas " + equipo.getNombreObj() + " y te proporciona " + equipo.getAtaque() + " ataque");
-            equipar = true;
+            if((objeto instanceof Arma))
+            {
+                equipo = (Arma) objeto;
+                System.out.println("\nEquipas " + equipo.getNombreObj() + " y te proporciona " + equipo.getAtaque() + " ataque");
+                equipar = true;
+            }
+            else
+            {
+                System.out.println("No puedes equipar ese objeto");
+            }
         }
         else
         {

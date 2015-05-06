@@ -15,17 +15,15 @@ public class Event
     // Donde tiene efecto el evento. No tiene porque ser en la localizacion donde se encuentra
     private Room localizacionAfectada;
     // Indica el comando necesario para activa el evento
-    private Option opcion;
+    protected Option opcion;
     // Informacion adicional necesaria para activar el evento, por ejemplo el objeto necesario
-    private String infoAdicional;
+    protected String infoAdicional;
     // Pista que se incluye en la descripcion de la zona mientras el evento no este activado
-    private String pista;
+    protected String pista;
     // Texto que se muestra al activar el evento
-    private String descripcion;
+    protected String descripcion;
     // Recoge si el evento ha sido activado o no. Sera true si ha sido activado, false sino
-    private boolean activado;
-    // Si el evento implica la aparición de un nuevo PNJ, se guarda aqui
-    private NPC pnj;
+    protected boolean activado;
     // Si el evento implica la aparición de un objeto, se guarda aqui
     private Item objeto;
     // Si el evento implica la aparición de una nueva localización, se guarda aqui

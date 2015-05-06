@@ -33,5 +33,14 @@ public class Usable extends Item
         return efecto;
     }
 
+     /**
+     * Devuelve una descripción con toda la información del item.
+     * @return La información del objeto.
+     */
+    public String getLongDescription()
+    {
+        String info = descripcionObj + "[" + nombreObj + "]" + "(" + peso + "kg)" + "[Usable]";
+        return info;
+    }
 }
 

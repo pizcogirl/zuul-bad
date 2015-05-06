@@ -27,4 +27,14 @@ public class Arma extends Equipable
     {
         return ataque;
     }
+    
+     /**
+     * Devuelve una descripción con toda la información del item.
+     * @return La información del objeto.
+     */
+    public String getLongDescription()
+    {
+        String info = descripcionObj + "[" + nombreObj + "]" + "(" + peso + "kg)" + " Ataque: " + ataque;;
+        return info;
+    }
 }

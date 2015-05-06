@@ -215,7 +215,7 @@ public class Player
         Item objeto = search(nombre);
         if ((objeto != null) && (objeto instanceof Arma))
         {
-            equipo = objeto;
+            equipo = (Arma) objeto;
             System.out.println("\nEquipas " + equipo.getNombreObj() + " y te proporciona " + equipo.getAtaque() + " ataque");
             equipar = true;
         }
@@ -270,9 +270,10 @@ public class Player
         Item obj = search(nombre);
         if(obj != null)
         {
-            if(obj instanceof Usable)
+            if(obj instanceof CuraResistencia)
             {
-                sumaResistencia(obj.getCuraRes());
+                CuraResistencia temp = (CuraResistencia) obj;
+                sumaResistencia(temp.getEfecto());
                 System.out.println("¡Usas "+ obj.getNombreObj() + " y recuperas resistencia!");
                 usar = true;
                 inventory.remove(obj);

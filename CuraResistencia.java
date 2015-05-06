@@ -20,5 +20,4 @@ public class CuraResistencia extends Usable
     {
         super(nombreObj, desc, peso, puedeCogerse, efecto);
     }
-
 }

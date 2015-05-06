@@ -69,17 +69,16 @@ public class Game
         arania = new NPC(true, "araña", null, "Una araña gigante", 3, 22);
 
         // Crea los eventos
-        evento1 = new Event(caverna, Option.BUSCAR, null, "Crees ver algo en una esquina", "Apartas unas rocas y encuentras un tesoro", null, 
-            (new CuraResistencia("pocion", "una poción que cura 15 de resistencia", 0.5F, true, 15)), null);
-        evento2 = new Event(salidaObstruida, Option.EQUIPAR, "espada", "Si equiparas una espada podrias abrirte paso", "Logras abrir un camino", null,
-            null, campo);
-        evento3 = new Event(habitacionTesoro, Option.COGER, "monedas", "!oro!","Al coger el tesoro, aparece su dueño", kobold2, null, null);
-        evento4 = new Event(bifurcacion, Option.BUSCAR, null, "notas algo extraño en la pared del fondo", "Encuentras una palanca escondida, y oyes un ruido lejano al activarla",
-            null, (new Arma("maza", "una pesada maza de metal", 3.5F, true, 6)), null);
-        evento5 = new Event(guarida, Option.BUSCAR, null, "ves varios cajones esparcidos por la habitacion", "En uno de los cajones hay algo", null, 
-            (new Arma("espada", "una espada afilada", 2.0F, true, 5)), null);
-            evento6 = new Event(campo, Option.HABLAR, null, "una mujer sentada frente a una casa te hace señas para que te acerques", "la mujer abre la puerta y te invita a pasar", 
-                                null,null, casaPequenia);
+        evento1 = new EventItem(caverna, Option.BUSCAR, null, "Crees ver algo en una esquina", "Apartas unas rocas y encuentras un tesoro", 
+            (new CuraResistencia("pocion", "una poción que cura 15 de resistencia", 0.5F, true, 15)));
+        evento2 = new EventRoom(Option.EQUIPAR, "espada", "Si equiparas una espada podrias abrirte paso", "Logras abrir un camino", campo);
+        evento3 = new EventNPC(habitacionTesoro, Option.COGER, "monedas", "!oro!","Al coger el tesoro, aparece su dueño", kobold2);
+        evento4 = new EventItem(bifurcacion, Option.BUSCAR, null, "notas algo extraño en la pared del fondo", "Encuentras una palanca escondida, y oyes un ruido lejano al activarla",
+            (new Arma("maza", "una pesada maza de metal", 3.5F, true, 6)));
+        evento5 = new EventItem(guarida, Option.BUSCAR, null, "ves varios cajones esparcidos por la habitacion", "En uno de los cajones hay algo",
+            (new Arma("espada", "una espada afilada", 2.0F, true, 5)));
+            evento6 = new EventRoom(Option.HABLAR, null, "una mujer sentada frente a una casa te hace señas para que te acerques", "la mujer abre la puerta y te invita a pasar", 
+                                casaPequenia);
 
         // Añade los eventos a las localizaciones
         caverna.addEvento(evento1);

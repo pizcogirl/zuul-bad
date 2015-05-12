@@ -69,17 +69,16 @@ public class Game
         arania = new NPC(true, "araña", null, "Una araña gigante", 3, 22);
 
         // Crea los eventos
-        evento1 = new Event(caverna, Option.BUSCAR, null, "Crees ver algo en una esquina", "Apartas unas rocas y encuentras un tesoro", null, 
-            (new Item("pocion", "una poción que cura 15 de resistencia", 0.5F, true, -1, 15)), null);
-        evento2 = new Event(salidaObstruida, Option.EQUIPAR, "espada", "Si equiparas una espada podrias abrirte paso", "Logras abrir un camino", null,
-            null, campo);
-        evento3 = new Event(habitacionTesoro, Option.COGER, "monedas", "!oro!","Al coger el tesoro, aparece su dueño", kobold2, null, null);
-        evento4 = new Event(bifurcacion, Option.BUSCAR, null, "notas algo extraño en la pared del fondo", "Encuentras una palanca escondida, y oyes un ruido lejano al activarla",
-            null, (new Item("maza", "una pesada maza de metal", 3.5F, true, 6, 0)), null);
-        evento5 = new Event(guarida, Option.BUSCAR, null, "ves varios cajones esparcidos por la habitacion", "En uno de los cajones hay algo", null, 
-            (new Item("espada", "una espada afilada", 2.0F, true, 5, 0)), null);
-            evento6 = new Event(campo, Option.HABLAR, null, "una mujer sentada frente a una casa te hace señas para que te acerques", "la mujer abre la puerta y te invita a pasar", 
-                                null,null, casaPequenia);
+        evento1 = new EventItem(caverna, Option.BUSCAR, null, "Crees ver algo en una esquina", "Apartas unas rocas y encuentras un tesoro", 
+            (new CuraResistencia("pocion", "una poción que cura 15 de resistencia", 0.5F, true, 15)));
+        evento2 = new EventRoom(Option.EQUIPAR, "espada", "Si equiparas una espada podrias abrirte paso", "Logras abrir un camino", campo);
+        evento3 = new EventNPC(habitacionTesoro, Option.COGER, "monedas", "!oro!","Al coger el tesoro, aparece su dueño", kobold2);
+        evento4 = new EventItem(bifurcacion, Option.BUSCAR, null, "notas algo extraño en la pared del fondo", "Encuentras una palanca escondida, y oyes un ruido lejano al activarla",
+            (new Arma("maza", "una pesada maza de metal", 3.5F, true, 6)));
+        evento5 = new EventItem(guarida, Option.BUSCAR, null, "ves varios cajones esparcidos por la habitacion", "En uno de los cajones hay algo",
+            (new Arma("espada", "una espada afilada", 2.0F, true, 5)));
+            evento6 = new EventRoom(Option.HABLAR, null, "una mujer sentada frente a una casa te hace señas para que te acerques", "la mujer abre la puerta y te invita a pasar", 
+                                casaPequenia);
 
         // Añade los eventos a las localizaciones
         caverna.addEvento(evento1);
@@ -98,19 +97,19 @@ public class Game
         casaGrande2.addPNJ(arania);
 
         // Añade objetos a localizaciones
-        entrada.addItem(new Item("piedra", "una piedra enorme", 50F, false, 50, 0));
-        entrada.addItem(new Item("antorcha", "una antorcha encendida", 0.5F, true, 2, 0));
-        caverna.addItem(new Item("cubo", "un cubo de metal", 1.0F, true, 1, 0));
-        bifurcacion.addItem(new Item("piedra", "una piedra de pequeño tamaño", 10.0F, false, 5, 0));
-        habitacionTesoro.addItem(new Item("monedas", "unas monedas de oro", 1.0F, true, 0, 0));
-        guarida.addItem(new Item("monedas", "unas monedas de plata", 2.0F, true, 0, 0));
-        casaGrande2.addItem(new Item("pocion", "una poción que cura 20 de resistencia", 0.5F, true, -1, 20));
+        entrada.addItem(new Item("piedra", "una piedra enorme", 50F, false));
+        entrada.addItem(new Arma("antorcha", "una antorcha encendida", 0.5F, true, 2));
+        caverna.addItem(new Item("cubo", "un cubo de metal", 1.0F, true));
+        bifurcacion.addItem(new Item("piedra", "una piedra de pequeño tamaño", 10.0F, false));
+        habitacionTesoro.addItem(new Item("monedas", "unas monedas de oro", 1.0F, true));
+        guarida.addItem(new Item("monedas", "unas monedas de plata", 2.0F, true));
+        casaGrande2.addItem(new CuraResistencia("pocion", "una poción que cura 20 de resistencia", 0.5F, true, 20));
 
         // Añade objetos a los PNJs
-        aldeano.addItem(new Item("pocion", "una pocion que cura 20 de resistencia", 1.F, true, -1, 20));
-        granjero.addItem(new Item("espada", "una espada afilada", 2.0F, true, 5, 0));
-        kobold.addItem(new Item("diamante", "una piedra preciosa muy valiosa", 0.1F, true, 0, 0));
-        kobold.addItem(new Item("monedas", "unas monedas de oro", 1.0F, true, 0, 0));
+        aldeano.addItem(new CuraResistencia("pocion", "una pocion que cura 20 de resistencia", 1.F, true, 20));
+        granjero.addItem(new Arma("espada", "una espada afilada", 2.0F, true, 5));
+        kobold.addItem(new Item("diamante", "una piedra preciosa muy valiosa", 0.1F, true));
+        kobold.addItem(new Item("monedas", "unas monedas de oro", 1.0F, true));
 
         // initialise room exits (norte, este, sur, oeste, sureste, noroeste)
         entrada.setExit("este", pasillo);
@@ -231,6 +230,7 @@ public class Game
             break;
             case USAR:
             ejecutado = usar(command);
+            break;
             case BUSCAR:
             ejecutado = player.buscar();
             break;

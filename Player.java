@@ -28,7 +28,7 @@ public class Player
     // Recoge si el jugador esta en combate
     private boolean enCombate;
     // El objeto equipado por el jugador en estos momentos
-    private Item equipo;
+    private Arma equipo;
     // La resistencia maxima del jugador
     private final int maxResistencia;
     /**
@@ -213,11 +213,18 @@ public class Player
     {
         boolean equipar = false;
         Item objeto = search(nombre);
-        if ((objeto != null) && (objeto != equipo))
+        if ((objeto != null))
         {
-            equipo = objeto;
-            System.out.println("\nEquipas " + objeto.getNombreObj() + " y te proporciona " + objeto.getAtaque() + " ataque");
-            equipar = true;
+            if((objeto instanceof Arma))
+            {
+                equipo = (Arma) objeto;
+                System.out.println("\nEquipas " + equipo.getNombreObj() + " y te proporciona " + equipo.getAtaque() + " ataque");
+                equipar = true;
+            }
+            else
+            {
+                System.out.println("No puedes equipar ese objeto");
+            }
         }
         else
         {
@@ -270,9 +277,10 @@ public class Player
         Item obj = search(nombre);
         if(obj != null)
         {
-            if(obj.getCuraRes() > 0)
+            if(obj instanceof CuraResistencia)
             {
-                sumaResistencia(obj.getCuraRes());
+                CuraResistencia temp = (CuraResistencia) obj;
+                sumaResistencia(temp.getEfecto());
                 System.out.println("¡Usas "+ obj.getNombreObj() + " y recuperas resistencia!");
                 usar = true;
                 inventory.remove(obj);

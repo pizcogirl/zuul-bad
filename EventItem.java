@@ -38,6 +38,7 @@ public class EventItem extends Event
     {
         if(!activado)
         {
+            System.out.println(descripcion);
             activado = true;
             localizacionAfectada.addItem(objeto);
         }

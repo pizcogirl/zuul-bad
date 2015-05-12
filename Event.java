@@ -84,6 +84,6 @@ public class Event
      */
     public void activar()
     {
-        
     }
+
 }

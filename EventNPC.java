@@ -34,10 +34,11 @@ public class EventNPC extends Event
     /**
      * El evento añade un nuevo pnj.
      */
-    public void activaPNJ()
+    public void activar()
     {
         if(!activado)
         {
+            System.out.println(descripcion);
             activado = true;
             localizacionAfectada.addPNJ(pnj);
         }

@@ -35,6 +35,7 @@ public class EventRoom extends Event
     {
         if(!activado)
         {
+            System.out.println(descripcion);
             activado = true;
             localizacion.abrir();
         }
